@@ -1,0 +1,28 @@
+{
+  "name": "pw-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "tsc --noEmit && eslint tests/** && eslint assertions/**",
+    "test": "playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@eslint/js": "^9.14.0",
+    "@playwright/test": "^1.48.2",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^22.9.0",
+    "axe-html-reporter": "^2.2.11",
+    "axios": "^1.7.7",
+    "eslint": "^9.14.0",
+    "sitemapper": "^3.2.14",
+    "typescript-eslint": "^8.13.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

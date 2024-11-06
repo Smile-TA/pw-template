@@ -1,0 +1,4 @@
+/* Elements to hide during VRT */
+iframe {
+    visibility: hidden;
+  }
