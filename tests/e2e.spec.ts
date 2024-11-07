@@ -10,6 +10,7 @@ import { checkSkipLink } from "../assertions/checkSkipLink";
 import { checkLastUpdated } from "../assertions/checkLastUpdated";
 import { checkSEO } from "../assertions/checkSEO";
 import { checkText } from "../assertions/checkText";
+import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { pages } from "../pages";
 
 pages.forEach((p) => {
@@ -85,7 +86,7 @@ test("Check Admin Email", async ({ page }) => {
   await checkAdminEmail(page);
 });
 
-test("Check last updated date", async ({ page }) => {
+test("Check privacy page date and text", async ({ page }) => {
   const privacyPage = pages.find((p) => p.includes("privacy"));
 
   if (!privacyPage) {
@@ -93,5 +94,6 @@ test("Check last updated date", async ({ page }) => {
   } else {
     await page.goto(privacyPage);
     await checkLastUpdated(page);
+    await checkPrivacyText(page);
   }
 });
