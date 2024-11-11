@@ -6,7 +6,7 @@ export async function checkGTM(page: Page) {
   }
   const noscript = await page.evaluate(() => {
     const el = [...document.querySelectorAll("noscript")].filter((e) =>
-      e.innerText.includes("GTM")
+      e.innerText.includes("GTM-5WZFJ3C9")
     )[0];
     if (el) {
       return el?.innerText;
@@ -24,7 +24,7 @@ export async function checkGTM(page: Page) {
 
   const script = await page.evaluate(() => {
     const el = [...document.querySelectorAll("script")].filter((e) =>
-      e.innerText.includes("GTM")
+      e.innerText.includes("GTM-5WZFJ3C9")
     )[0];
     if (el) {
       return el?.innerText;
