@@ -9,3 +9,4 @@ pages.ts
 tests/*-snapshots/
 playwright/.auth
 ignore-*
+.vscode/
