@@ -9,7 +9,7 @@ export default tseslint.config(
      * config with just ignores is the replacement for `.eslintignore`
      * @see https://typescript-eslint.io/packages/typescript-eslint#advanced-usage
      * */
-    ignores: ["**/utils/**", "ignore-*"],
+    ignores: ["utils/", "ignore-*", "eslint.config.mjs", "playwright-report/"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,

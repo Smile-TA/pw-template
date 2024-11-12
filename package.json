@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "pretest": "tsc --noEmit && eslint tests/** && eslint assertions/**",
+    "pretest": "tsc --noEmit && eslint .",
     "test": "playwright test"
   },
   "keywords": [],
