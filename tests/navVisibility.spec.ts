@@ -1,7 +1,12 @@
 import { test, expect, type Page } from "@playwright/test";
 
-const sizes: { width: number; height: number }[] = [];
-const chunks: { width: number; height: number }[][] = [];
+interface Size {
+  width: number;
+  height: number;
+}
+
+const sizes: Size[] = [];
+const chunks: Size[][] = [];
 
 test.describe.configure({ mode: "parallel" });
 
@@ -35,20 +40,32 @@ test("Check nav at all sizes fifth chunk", async ({ page }) => {
   await assertNavVisible(page, chunks[4]);
 });
 
-async function assertNavVisible(
-  page: Page,
-  chunk: { width: number; height: number }[]
-) {
+async function assertNavVisible(page: Page, chunk: Size[]) {
   await page.goto("/");
   for (const size of chunk) {
     await page.setViewportSize({ ...size });
-    // TODO: Better to use "or" to and provide two custom selectors per website. 
-    const nav = page.getByRole("navigation").first();
+    const menu = page.locator(process.env.NAV_SELECTOR_MENU ?? "");
+    const toggle = page.locator(process.env.NAV_SELECTOR_TOGGLE ?? "");
+    if (await menu.isVisible()) {
+      await expect(
+        toggle,
+        `Toggle should not be visible at ${size.width} px width`
+      ).not.toBeVisible();
+      await expect(
+        menu,
+        `Menu should be visible at ${size.width} px width`
+      ).toBeVisible();
+    } else {
+      await expect(
+        toggle,
+        `Toggle should be visible at ${size.width} px width`
+      ).toBeVisible();
+      await expect(
+        menu,
+        `Menu should not be visible at ${size.width} px width`
+      ).not.toBeVisible();
+    }
     // TODO: Find and test on a broken site
-    await expect(
-      nav,
-      `Nav is not visible at ${size.width} px width`
-    ).toBeVisible();
   }
 }
 
