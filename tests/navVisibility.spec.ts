@@ -42,6 +42,7 @@ async function assertNavVisible(
   await page.goto("/");
   for (const size of chunk) {
     await page.setViewportSize({ ...size });
+    // TODO: Better to use "or" to and provide two custom selectors per website. 
     const nav = page.getByRole("navigation").first();
     // TODO: Find and test on a broken site
     await expect(
