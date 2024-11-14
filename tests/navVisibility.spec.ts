@@ -46,6 +46,7 @@ async function assertNavVisible(page: Page, chunk: Size[]) {
     await page.setViewportSize({ ...size });
     const menu = page.locator(process.env.NAV_SELECTOR_MENU ?? "");
     const toggle = page.locator(process.env.NAV_SELECTOR_TOGGLE ?? "");
+    // TODO: try to replace isVisible as it is flaky. Use one of the referenced link below. Menu tends to be visible, and out side of viewport
     if (await menu.isVisible()) {
       await expect(
         toggle,
@@ -70,3 +71,7 @@ async function assertNavVisible(page: Page, chunk: Size[]) {
 }
 
 // npx playwright test --headed --project="nav-visibility" -> for demo only, will fail on timeout
+
+// https://github.com/Automattic/wp-calypso/pull/70982 some insight on isVisible() from wordpress team.
+// https://github.com/microsoft/playwright/issues/12224 can try locatorExists custom function
+// https://github.com/microsoft/playwright/issues/12224#issuecomment-2059077526 or try locator handler. -> as expected this only works when there are actions to follow
