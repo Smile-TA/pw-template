@@ -42,12 +42,15 @@ test("Check nav at all sizes fifth chunk", async ({ page }) => {
 
 async function assertNavVisible(page: Page, chunk: Size[]) {
   await page.goto("/");
+  const toggleVisibleBreakpoint = process.env.NAV_TOGGLE_VISIBLE_BREAKPOINT
+    ? parseInt(process.env.NAV_TOGGLE_VISIBLE_BREAKPOINT)
+    : -1;
+  const menu = page.locator(process.env.NAV_SELECTOR_MENU ?? "");
+  const toggle = page.locator(process.env.NAV_SELECTOR_TOGGLE ?? "");
+
   for (const size of chunk) {
     await page.setViewportSize({ ...size });
-    const menu = page.locator(process.env.NAV_SELECTOR_MENU ?? "");
-    const toggle = page.locator(process.env.NAV_SELECTOR_TOGGLE ?? "");
-    // TODO: try to replace isVisible as it is flaky. Use one of the referenced link below. Menu tends to be visible, and out side of viewport
-    if (await menu.isVisible()) {
+    if (size.width > toggleVisibleBreakpoint) {
       await expect(
         toggle,
         `Toggle should not be visible at ${size.width} px width`
