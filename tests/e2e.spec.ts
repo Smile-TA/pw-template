@@ -14,7 +14,7 @@ import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { pages } from "../pages";
 
 pages.forEach((p) => {
-  const pageName = p === "/" ? "Home Page" : p;
+  const pageName = p === "/" ? "Home" : p;
   test.describe(`test ${pageName} page`, () => {
     /**
      * @see {@link https://playwright.dev/docs/test-retries#reuse-single-page-between-tests Playwright doc reference}
