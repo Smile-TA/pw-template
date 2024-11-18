@@ -43,7 +43,7 @@ export async function checkLastUpdated(page: Page) {
   expect
     .soft(
       date.getTime(),
-      `Last updated date of ${date.toDateString()} is past the cut off date of ${cutOffDate.toDateString()}`
+      `Last updated date of ${date.toDateString()} should be later than the cut off date of ${cutOffDate.toDateString()}`
     )
     .toBeGreaterThan(cutOffDate.getTime());
 }
