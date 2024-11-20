@@ -19,6 +19,12 @@ export async function checkAdminEmail(page: Page) {
   if (await reminder.isVisible()) {
     await reminder.click();
   }
+
+  const updateDB = page.getByAltText("Update WordPress Database");
+  if (await updateDB.isVisible()) {
+    await updateDB.click();
+  }
+
   await page.getByRole("menuitem", { name: "About WordPress" }).click();
   await page
     .locator("#menu-settings > .wp-has-submenu > .wp-menu-name")
