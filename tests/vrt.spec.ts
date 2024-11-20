@@ -3,7 +3,7 @@ import { pages } from "../pages";
 import path from "path";
 
 pages.forEach((p) => {
-  const pageName = p === "/" ? "Home Page" : p;
+  const pageName = p === "/" ? "Home" : p;
   test(`Do full page vrt for ${pageName} page`, async ({ page }) => {
     await page.goto(p);
     await expect(page).toHaveScreenshot({
