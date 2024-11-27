@@ -1,9 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 
 export async function checkGTM(page: Page) {
-  if (page.url().includes("staging")) {
-    return;
-  }
   const noscript = await page.evaluate(() => {
     const el = [...document.querySelectorAll("noscript")].filter((e) =>
       e.innerText.includes("GTM-5WZFJ3C9")

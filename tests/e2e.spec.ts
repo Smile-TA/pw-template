@@ -33,6 +33,12 @@ pages.forEach((p) => {
       await checkFavicon(page);
     });
     test("Check GTM", async () => {
+      if (process.env.BASE_URL) {
+        test.skip(
+          process.env.BASE_URL.includes("staging"),
+          "GTM is only checked on production"
+        );
+      }
       await checkGTM(page);
     });
 
