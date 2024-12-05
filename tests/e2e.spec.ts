@@ -55,7 +55,6 @@ pages.forEach((p) => {
       await checkTelLinks(page);
     });
 
-    //TODO: add prod only test, staging links should not exist
     test("Check staging links do not exist on prod", async () => {
       if (process.env.BASE_URL) {
         test.skip(
