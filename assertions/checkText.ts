@@ -7,5 +7,7 @@ export async function checkText(page: Page) {
     .not.toBeVisible();
   await expect.soft(page.getByText(/\{(.*?)\}/)).not.toBeVisible();
   await expect.soft(page.getByText(/\[(.*?)\]/)).not.toBeVisible();
+  await expect.soft(page.getByText(/<(.*?)>/)).not.toBeVisible();
   await expect.soft(page.getByText("Hello world")).not.toBeVisible();
+  expect.soft(await page.title()).not.toContain("Just another WordPress site");
 }
