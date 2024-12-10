@@ -14,6 +14,8 @@ import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { pages } from "../pages";
 import { checkStagingLinks } from "../assertions/checkStagingLinks";
 
+// TODO: Add too many requests listener. Stop all workers.
+
 pages.forEach((p) => {
   const pageName = p === "/" ? "Home" : p;
   test.describe(`test ${pageName} page`, () => {
