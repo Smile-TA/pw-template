@@ -102,6 +102,10 @@ test("Check Admin Email", async ({ page }) => {
       "Admin email is only checked on production"
     );
   }
+  test.skip(
+    !process.env.ADMIN_USR_NAME || !process.env.ADMIN_USR_PSW,
+    "Admin credentials not provided"
+  );
   await checkAdminEmail(page);
 });
 
