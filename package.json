@@ -19,7 +19,7 @@
     "axe-html-reporter": "^2.2.11",
     "axios": "^1.7.9",
     "eslint": "^9.16.0",
-    "sitemapper": "^3.2.18",
+    "sitemapper": "^3.2.12",
     "typescript-eslint": "^8.18.0"
   },
   "dependencies": {
