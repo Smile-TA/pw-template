@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "pretest": "tsc --noEmit && eslint .",
-    "test": "playwright test --workers 3"
+    "lint": "tsc --noEmit && eslint .",
+    "pretest": "npm run lint",
+    "pretest:e2e": "npm run lint",
+    "test": "playwright test --workers 3",
+    "test:e2e": "playwright test --workers 3 --project e2e"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +22,7 @@
     "axe-html-reporter": "^2.2.11",
     "axios": "^1.7.9",
     "eslint": "^9.16.0",
-    "sitemapper": "^3.2.18",
+    "sitemapper": "^3.2.12",
     "typescript-eslint": "^8.18.0"
   },
   "dependencies": {
