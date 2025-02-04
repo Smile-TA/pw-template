@@ -7,6 +7,8 @@ import type {
   TestResult,
 } from "@playwright/test/reporter";
 
+import { type Result } from "axe-core";
+
 class AxeSummaryReporter implements Reporter {
   private suite!: Suite;
   onBegin(config: FullConfig, suite: Suite) {
@@ -27,16 +29,44 @@ class AxeSummaryReporter implements Reporter {
         (attachment) => attachment.name === "violations"
       );
       const s = violations[0].body?.toString("utf-8") ?? "";
-      console.log(JSON.stringify(JSON.parse(s), null, "    "));
+      console.log(
+        `TEST RESULST FOR ${test.title}
+        `,
+        JSON.stringify(JSON.parse(s), null, "    "),
+        `
+        END TEST RESULST FOR ${test.title}`
+      );
     }
   }
 
   onEnd(result: FullResult) {
-    // Can access all test results and attachments here. 
+    // Can access all test results and attachments here.
     // Try to use the build pattern from the html reporter
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
     const suites = this.suite;
-    console.log(suites);
+    // const results: TestResult[] = [];
+    const entries = suites.entries();
+    entries.forEach((entry) => {
+      if (entry.type === "project") {
+        entry.entries().forEach((subentry) => {
+          if (subentry.type === "file") {
+            subentry.entries().forEach((test) => {
+              if (test.type === "test") {
+                test.results[0].attachments.forEach((attachment) => {
+                  if (attachment.name === "violations") {
+                    const violations = JSON.parse(
+                      attachment.body?.toString("utf-8") ?? ""
+                    );
+                    const violation: Result = violations[0];
+                    console.log(violation.id, violation.nodes);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
     console.log(`Finished the run: ${result.status}`);
   }
 }

@@ -26,6 +26,7 @@
     "typescript-eslint": "^8.18.0"
   },
   "dependencies": {
+    "axe-core": "^4.10.2",
     "dotenv": "^16.4.7"
   }
 }
