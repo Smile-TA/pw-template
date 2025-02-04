@@ -7,7 +7,7 @@ import type {
   TestResult,
 } from "@playwright/test/reporter";
 
-import { type Result } from "axe-core";
+// import { type Result as ViolationResult } from "axe-core";
 
 class AxeSummaryReporter implements Reporter {
   private suite!: Suite;
@@ -44,30 +44,26 @@ class AxeSummaryReporter implements Reporter {
     // Try to use the build pattern from the html reporter
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
     const suites = this.suite;
-    // const results: TestResult[] = [];
-    const entries = suites.entries();
-    entries.forEach((entry) => {
-      if (entry.type === "project") {
-        entry.entries().forEach((subentry) => {
-          if (subentry.type === "file") {
-            subentry.entries().forEach((test) => {
-              if (test.type === "test") {
-                test.results[0].attachments.forEach((attachment) => {
-                  if (attachment.name === "violations") {
-                    const violations = JSON.parse(
-                      attachment.body?.toString("utf-8") ?? ""
-                    );
-                    const violation: Result = violations[0];
-                    console.log(violation.id, violation.nodes);
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const violations: any = [];
+    this.getViolations(suites, violations);
+    console.log(violations);
     console.log(`Finished the run: ${result.status}`);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getViolations(suite: Suite | TestCase, res?: any) {
+    if (suite.type === "test") {
+      suite.results.forEach((result) =>
+        res?.push(
+          ...result.attachments.filter(
+            (attachment) => attachment.name === "violations"
+          )
+        )
+      );
+    } else {
+      suite.entries().forEach((s) => this.getViolations(s, res));
+    }
   }
 }
 
