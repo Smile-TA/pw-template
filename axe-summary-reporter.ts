@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
   FullConfig,
   FullResult,
@@ -25,17 +27,17 @@ class AxeSummaryReporter implements Reporter {
     // const messageString = result.error?.message ?? "";
     // console.log(stripAnsi(messageString));
     if (test.title.includes("WCAG")) {
-      const violations = result.attachments.filter(
-        (attachment) => attachment.name === "violations"
-      );
-      const s = violations[0].body?.toString("utf-8") ?? "";
-      console.log(
-        `TEST RESULST FOR ${test.title}
-        `,
-        JSON.stringify(JSON.parse(s), null, "    "),
-        `
-        END TEST RESULST FOR ${test.title}`
-      );
+      // const violations = result.attachments.filter(
+      //   (attachment) => attachment.name === "violations"
+      // );
+      // const s = violations[0].body?.toString("utf-8") ?? "";
+      // console.log(
+      //   `TEST RESULST FOR ${test.title}
+      //   `,
+      //   JSON.stringify(JSON.parse(s), null, "    "),
+      //   `
+      //   END TEST RESULST FOR ${test.title}`
+      // );
     }
   }
 
@@ -44,23 +46,32 @@ class AxeSummaryReporter implements Reporter {
     // Try to use the build pattern from the html reporter
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
     const suites = this.suite;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const violations: any = [];
     this.getViolations(suites, violations);
-    console.log(violations);
+    const violationsDecoded = violations
+      .map((violation: { body: { toString: (arg0: string) => any } }) =>
+        JSON.parse(violation.body.toString("utf-8"))
+      )
+      .filter((o: string | any[]) => o.length)
+      .flat();
+    const grouped = Object.groupBy(
+      violationsDecoded,
+      (o: { nodes: any[] }) => o.nodes[0].target
+    );
+    console.log(grouped);
     console.log(`Finished the run: ${result.status}`);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getViolations(suite: Suite | TestCase, res?: any) {
     if (suite.type === "test") {
-      suite.results.forEach((result) =>
+      suite.results.forEach((result) => {
         res?.push(
-          ...result.attachments.filter(
-            (attachment) => attachment.name === "violations"
-          )
-        )
-      );
+          ...result.attachments
+            .filter((attachment) => attachment.name === "violations")
+            .map((attachment) => ({ ...attachment, title: suite.parent.title }))
+        );
+      });
     } else {
       suite.entries().forEach((s) => this.getViolations(s, res));
     }
