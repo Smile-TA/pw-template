@@ -14,6 +14,7 @@ import { checkText } from "../assertions/checkText";
 
 const trustArcUrl: string | undefined = process.env.TRUSTARC_URL;
 const privacyPolicyUrl = "/privacy-policy";
+const consumerHealthUrl = "/consumer-health-data-privacy-notice/";
 test.describe("privacy page", () => {
   test("test trust arc url", async ({ page }) => {
     expect(trustArcUrl).toBeTruthy();
@@ -74,7 +75,7 @@ test.describe("privacy page", () => {
 
 test.describe("consumer health data", () => {
   test("test trust arc url", async ({ page }) => {
-    await page.goto("/consumer-health-data-privacy-notice/");
+    await page.goto(consumerHealthUrl);
     const links = page.locator(`a[href="${trustArcUrl}"]`);
     await expect(links).toHaveCount(3);
   });
@@ -82,7 +83,7 @@ test.describe("consumer health data", () => {
     page,
     baseURL,
   }, testInfo) => {
-    await page.goto("/consumer-health-data-privacy-notice/");
+    await page.goto(consumerHealthUrl);
     await checkH1Count(page);
     await checkOutboundLinks(page, baseURL);
     await checkStagingLinks(page);
@@ -96,7 +97,7 @@ test.describe("consumer health data", () => {
   for (let i = 0; i < consumerHealthParagraphs.length; i += chunkSize) {
     const chunks = consumerHealthParagraphs.slice(i, i + chunkSize);
     test(`verify content at chunk ${i}`, async ({ page }) => {
-      await page.goto("/consumer-health-data-privacy-notice/");
+      await page.goto(consumerHealthUrl);
       for (const chunk of chunks) {
         if (Array.isArray(chunk)) {
           await expect
