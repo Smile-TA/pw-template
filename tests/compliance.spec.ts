@@ -1,8 +1,19 @@
 import { test, expect } from "@playwright/test";
-import { privacyPolicyParagraphs } from "../complianceContent";
+import {
+  privacyPolicyParagraphs,
+  consumerHealthParagraphs,
+} from "../complianceContent";
+import { checkH1Count } from "../assertions/checkH1";
+import { checkOutboundLinks } from "../assertions/checkOutboundLinks";
+import { checkStagingLinks } from "../assertions/checkStagingLinks";
+import { checkRobots } from "../assertions/checkRobots";
+import { checkTelLinks } from "../assertions/checkTelLinks";
+import { checkWCAG } from "../assertions/checkWCAG";
+import { checkFavicon } from "../assertions/checkFavicon";
+import { checkText } from "../assertions/checkText";
 
 const trustArcUrl: string | undefined = process.env.TRUSTARC_URL;
-const privacyPolicyUrl = "/privacy-notice";
+const privacyPolicyUrl = "/privacy-policy";
 test.describe("privacy page", () => {
   test("test trust arc url", async ({ page }) => {
     expect(trustArcUrl).toBeTruthy();
@@ -10,9 +21,6 @@ test.describe("privacy page", () => {
     // should be 6 (including 1 in the footer)
     const links = page.locator(`a[href="${trustArcUrl}"]`);
     await expect(links).toHaveCount(6);
-    for (const link of await links.all()) {
-      await expect(link).toHaveAttribute("target", "_blank");
-    }
   });
   test("placeholder text should not be visible", async ({ page }) => {
     await page.goto(privacyPolicyUrl);
@@ -22,11 +30,26 @@ test.describe("privacy page", () => {
       "[INSERT BU URLs]",
       "[INSERT]",
     ];
-    for (const placeholder in placeholders) {
+    for (const placeholder of placeholders) {
       await expect(
         page.getByText(placeholder, { exact: true })
       ).not.toBeVisible();
     }
+  });
+
+  test("standard assertions from e2e test", async ({
+    page,
+    baseURL,
+  }, testInfo) => {
+    await page.goto(privacyPolicyUrl);
+    await checkH1Count(page);
+    await checkOutboundLinks(page, baseURL);
+    await checkStagingLinks(page);
+    await checkRobots(page);
+    await checkTelLinks(page);
+    await checkText(page);
+    await checkFavicon(page);
+    await checkWCAG(page, testInfo);
   });
 
   const chunkSize = 10;
@@ -54,8 +77,37 @@ test.describe("consumer health data", () => {
     await page.goto("/consumer-health-data-privacy-notice/");
     const links = page.locator(`a[href="${trustArcUrl}"]`);
     await expect(links).toHaveCount(3);
-    for (const link of await links.all()) {
-      await expect(link).toHaveAttribute("target", "_blank");
-    }
   });
+  test("standard assertions from e2e test", async ({
+    page,
+    baseURL,
+  }, testInfo) => {
+    await page.goto("/consumer-health-data-privacy-notice/");
+    await checkH1Count(page);
+    await checkOutboundLinks(page, baseURL);
+    await checkStagingLinks(page);
+    await checkRobots(page);
+    await checkTelLinks(page);
+    await checkText(page);
+    await checkFavicon(page);
+    await checkWCAG(page, testInfo);
+  });
+  const chunkSize = 10;
+  for (let i = 0; i < consumerHealthParagraphs.length; i += chunkSize) {
+    const chunks = consumerHealthParagraphs.slice(i, i + chunkSize);
+    test(`verify content at chunk ${i}`, async ({ page }) => {
+      await page.goto("/consumer-health-data-privacy-notice/");
+      for (const chunk of chunks) {
+        if (Array.isArray(chunk)) {
+          await expect
+            .soft(page.getByText(chunk[0], { exact: false }))
+            .toHaveCount(parseInt(chunk[1]));
+        } else {
+          await expect
+            .soft(page.getByText(chunk, { exact: false }))
+            .toBeVisible();
+        }
+      }
+    });
+  }
 });
