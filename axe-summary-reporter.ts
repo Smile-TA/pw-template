@@ -31,12 +31,7 @@ class AxeSummaryReporter implements Reporter {
     // Try to use the build pattern from the html reporter
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
     const suites = this.suite;
-    const violationsDecoded = this.getViolations(suites)
-      .map((violation: { body: { toString: (arg0: string) => any } }) =>
-        JSON.parse(violation.body.toString("utf-8"))
-      )
-      .filter((o: string | any[]) => o.length)
-      .flat();
+    const violationsDecoded = this.getViolations(suites).flat();
     const grouped = Object.groupBy(
       violationsDecoded,
       (o: { nodes: any[] }) => o.nodes[0].target
@@ -51,8 +46,16 @@ class AxeSummaryReporter implements Reporter {
       suite.results.forEach((result) => {
         res?.push(
           ...result.attachments
-            .filter((attachment) => attachment.name === "violations")
-            .map((attachment) => ({ ...attachment, title: suite.parent.title }))
+            .filter((attachment) => attachment.name === "axe-results")
+            .map((attachment) => {
+              const body = JSON.parse(attachment.body?.toString("utf-8") ?? "");
+              const url = body.url;
+              const violations = body.violations;
+              return violations.map((violation: any) => ({
+                ...violation,
+                url: url,
+              }));
+            })
         );
       });
     } else {

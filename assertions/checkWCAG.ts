@@ -19,8 +19,8 @@ export async function checkWCAG(page: Page, testInfo: TestInfo) {
     contentType: "text/html",
   });
 
-  await testInfo.attach("violations", {
-    body: JSON.stringify(accessibilityScanResults.violations),
+  await testInfo.attach("axe-results", {
+    body: JSON.stringify(accessibilityScanResults),
     contentType: "application/json",
   });
 
