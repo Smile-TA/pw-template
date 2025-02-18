@@ -25,11 +25,18 @@ Last Updated: August, 2023 -> https://planyourfuture.biz/
 
 export async function checkLastUpdated(page: Page) {
   const lastUpdated = page.getByText("Last Updated");
-  const dateText = await page
+  let dateText = await page
     .locator("p", { has: lastUpdated })
     .or(page.locator("div", { has: lastUpdated }))
     .allInnerTexts();
   let unformattedDate = "";
+  if (!dateText.length) {
+    const lastModified = page.getByText("Last Modified");
+    dateText = await page
+      .locator("p", { has: lastModified })
+      .or(page.locator("div", { has: lastModified }))
+      .allInnerTexts();
+  }
   for (const month of months) {
     const i = dateText[0].indexOf(month);
     if (i > 0) {
