@@ -25,8 +25,16 @@ class AxeSummaryReporter implements Reporter {
     const violationsDecoded = this.getViolations(suites).flat();
     const grouped = Map.groupBy(
       violationsDecoded,
-      // TODO: Need to consider all nodes and targets not just the first one.
-      (violation: Violation) => violation.nodes[0].target[0]
+      // TODO: Need to consider all nodes and targets not just the first one. Keep an eye if any websites throw errors below
+      (violation: Violation) => {
+        if (violation.nodes.length > 1) {
+          throw Error("More than one node detected");
+        }
+        if (violation.nodes.some((n) => n.target.length > 1)) {
+          throw Error("More than one target detected");
+        }
+        return violation.nodes[0].target[0];
+      }
     );
     console.log(grouped);
     console.log(`Finished the run: ${result.status}`);
