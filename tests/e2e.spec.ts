@@ -118,7 +118,7 @@ test("Check privacy page date and text", async ({ page }) => {
     test.skip(!privacyPage, "Privacy Page not found");
   } else {
     await page.goto(privacyPage);
-    await checkLastUpdated(page);
     await checkPrivacyText(page);
+    await checkLastUpdated(page);
   }
 });
