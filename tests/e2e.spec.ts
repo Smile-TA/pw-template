@@ -79,7 +79,7 @@ pages.forEach((p) => {
         );
         test.skip(
           p.includes("privacy") || p.includes("terms"),
-          "SEO meta tags is not needed for this page."
+          "SEO meta tag is not needed for this page."
         );
       }
       await checkSEO(page);
@@ -110,13 +110,15 @@ test("Check Admin Email", async ({ page }) => {
 });
 
 test("Check privacy page date and text", async ({ page }) => {
-  const privacyPage = pages.find((p) => p.includes("privacy"));
+  const privacyPage = pages.find(
+    (p) => p.includes("privacy") && p.indexOf("privacy") == 1
+  );
 
   if (!privacyPage) {
     test.skip(!privacyPage, "Privacy Page not found");
   } else {
     await page.goto(privacyPage);
-    await checkLastUpdated(page);
     await checkPrivacyText(page);
+    await checkLastUpdated(page);
   }
 });

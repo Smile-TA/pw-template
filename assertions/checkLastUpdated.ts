@@ -24,12 +24,24 @@ Last Updated: August, 2023 -> https://planyourfuture.biz/
 */
 
 export async function checkLastUpdated(page: Page) {
-  const dateText = await page.getByText("Last Updated").allInnerTexts();
+  const lastUpdated = page.getByText("Last Updated");
+  let dateText = await page
+    .locator("p", { has: lastUpdated })
+    .or(page.locator("div", { has: lastUpdated }))
+    .allInnerTexts();
   let unformattedDate = "";
+  if (!dateText.length) {
+    const lastModified = page.getByText("Last Modified");
+    dateText = await page
+      .locator("p", { has: lastModified })
+      .or(page.locator("div", { has: lastModified }))
+      .allInnerTexts();
+  }
+  const joined = dateText.join();
   for (const month of months) {
-    const i = dateText[0].indexOf(month);
+    const i = joined.indexOf(month);
     if (i > 0) {
-      unformattedDate = dateText[0].slice(i);
+      unformattedDate = joined.slice(i);
       break;
     }
   }
