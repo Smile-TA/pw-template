@@ -37,10 +37,11 @@ export async function checkLastUpdated(page: Page) {
       .or(page.locator("div", { has: lastModified }))
       .allInnerTexts();
   }
+  const joined = dateText.join();
   for (const month of months) {
-    const i = dateText[0].indexOf(month);
+    const i = joined.indexOf(month);
     if (i > 0) {
-      unformattedDate = dateText[0].slice(i);
+      unformattedDate = joined.slice(i);
       break;
     }
   }
