@@ -1,29 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
   FullConfig,
   FullResult,
   Reporter,
   Suite,
   TestCase,
-  TestResult,
 } from "@playwright/test/reporter";
 
-// import { type Result as ViolationResult } from "axe-core";
-
+import { type Result as ViolationResult } from "axe-core";
+interface Violation extends ViolationResult {
+  url: string;
+}
 class AxeSummaryReporter implements Reporter {
   private suite!: Suite;
   onBegin(config: FullConfig, suite: Suite) {
     console.log(`Starting the run with ${suite.allTests().length} tests`);
     this.suite = suite;
-  }
-
-  onTestBegin(test: TestCase) {
-    console.log(`Starting test ${test.title}`);
-  }
-
-  onTestEnd(test: TestCase, result: TestResult) {
-    console.log(`Finished test ${test.title}: ${result.status}`);
   }
 
   onEnd(result: FullResult) {
@@ -32,16 +23,16 @@ class AxeSummaryReporter implements Reporter {
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
     const suites = this.suite;
     const violationsDecoded = this.getViolations(suites).flat();
-    const grouped = Object.groupBy(
+    const grouped = Map.groupBy(
       violationsDecoded,
-      (o: { nodes: any[] }) => o.nodes[0].target
+      // TODO: Need to consider all nodes and targets not just the first one.
+      (violation: Violation) => violation.nodes[0].target[0]
     );
     console.log(grouped);
     console.log(`Finished the run: ${result.status}`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getViolations(suite: Suite | TestCase, res: any = []) {
+  getViolations(suite: Suite | TestCase, res: Violation[] = []) {
     if (suite.type === "test") {
       suite.results.forEach((result) => {
         res?.push(
@@ -51,7 +42,7 @@ class AxeSummaryReporter implements Reporter {
               const body = JSON.parse(attachment.body?.toString("utf-8") ?? "");
               const url = body.url;
               const violations = body.violations;
-              return violations.map((violation: any) => ({
+              return violations.map((violation: Violation) => ({
                 ...violation,
                 url: url,
               }));
