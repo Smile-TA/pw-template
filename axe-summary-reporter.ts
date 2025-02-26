@@ -6,10 +6,19 @@ import type {
   TestCase,
 } from "@playwright/test/reporter";
 
-import { type Result as ViolationResult } from "axe-core";
+import { type Result as ViolationResult, NodeResult } from "axe-core";
+
 interface Violation extends ViolationResult {
   url: string;
 }
+
+interface violationNode extends NodeResult {
+  url: string;
+  description: string;
+  help: string;
+  helpUrl: string;
+}
+
 class AxeSummaryReporter implements Reporter {
   private suite!: Suite;
   onBegin(config: FullConfig, suite: Suite) {
@@ -23,17 +32,27 @@ class AxeSummaryReporter implements Reporter {
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
     const suites = this.suite;
     const violationsDecoded = this.getViolations(suites).flat();
+    const nodes = violationsDecoded.reduce((acc, violation) => {
+      const modifiedNodes = violation.nodes.map((n) => {
+        return {
+          url: violation.url,
+          description: violation.description,
+          help: violation.help,
+          helpUrl: violation.helpUrl,
+          ...n,
+        };
+      });
+      acc.push(...modifiedNodes);
+      return acc;
+    }, [] as violationNode[]);
     const grouped = Map.groupBy(
-      violationsDecoded,
-      // TODO: Need to consider all nodes and targets not just the first one. Keep an eye if any websites throw errors below
-      (violation: Violation) => {
-        if (violation.nodes.length > 1) {
-          throw Error("More than one node detected");
+      nodes,
+      // TODO: Need to consider all targets not just the first one. Keep an eye if any websites throw errors below
+      (violationNode) => {
+        if (violationNode.target.length > 1) {
+          throw Error("More than one target detected at: ");
         }
-        if (violation.nodes.some((n) => n.target.length > 1)) {
-          throw Error("More than one target detected");
-        }
-        return violation.nodes[0].target[0];
+        return violationNode.target[0];
       }
     );
     console.log(grouped);
