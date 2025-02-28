@@ -237,9 +237,9 @@ export const trustArcLinks: { [key: string]: string } = {
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=13cc5f18-0392-462c-8105-fc955efe2e58",
   "https://lionstreet.com/":
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=ebf18504-6165-4a69-ba0a-10dd8ad93adc",
-  "https://orgcorp.com/":
+  "https://www.orgcorp.com/":
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=453c11ba-96c9-4783-a79c-f5a5d578b55b",
-  "https://www.deftresearch.com/":
+  "https://deftresearch.com/":
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=77c93d88-35a9-4588-aa91-b0eab6a5b88f",
   "https://appliedga.com/":
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=c5f931f8-70cc-49ce-81d1-5f48b2b51f83",
