@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import {
   privacyPolicyParagraphs,
   consumerHealthParagraphs,
+  trustArcLinks,
 } from "../complianceContent";
 import { checkH1Count } from "../assertions/checkH1";
 import { checkOutboundLinks } from "../assertions/checkOutboundLinks";
@@ -11,8 +12,12 @@ import { checkTelLinks } from "../assertions/checkTelLinks";
 import { checkWCAG } from "../assertions/checkWCAG";
 import { checkFavicon } from "../assertions/checkFavicon";
 import { checkText } from "../assertions/checkText";
+import playwrightConfig from "../playwright.config";
 
-const trustArcUrl: string | undefined = process.env.TRUSTARC_URL;
+if (!playwrightConfig.use?.baseURL) {
+  throw Error("Base url is missing");
+}
+const trustArcUrl = trustArcLinks[playwrightConfig.use?.baseURL];
 const privacyPolicyUrl = "/privacy-policy";
 const consumerHealthUrl = "/consumer-health-data-privacy-notice/";
 test.describe("privacy page", () => {

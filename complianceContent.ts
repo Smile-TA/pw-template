@@ -171,3 +171,76 @@ export const consumerHealthParagraphs = [
   "To exercise any of these rights, please click here.",
   "We may revise this Consumer Health Data Privacy Notice from time to time. If we make material changes to this Consumer Health Data Privacy Notice, we will notify you by email or by posting a notice on our Platform prior to or on the effective date of the changes. By continuing to access or use the Platform after those changes become effective, you acknowledge the revised Consumer Health Data Privacy Notice.",
 ];
+
+export const trustArcLinks: { [key: string]: string } = {
+  "https://familyfirstlifeusa.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=ec980c82-78b0-4499-bb9b-c74fde2d2288",
+  "https://tidewatermg.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=fc2e34b4-de2d-42ed-a034-25bb0f9a22a7",
+  "https://legacysafeguard.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=3d705d70-22a2-4dc7-93a0-9d5b7e50396b",
+  "https://premiersmi.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=47bb6c72-c847-4e97-bf0b-b138ba6ed900",
+  "https://naaleads.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=20c30679-7195-43cc-9b34-fcb078f48cb8",
+  "https://copelandgroupusa.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=56d1dc2d-ad27-4dd5-a413-0130febe4853",
+  "https://agent.familyfirstlife.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=f9e5f777-a067-4572-97c5-8fac6049d82f",
+  "https://aimc.net/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=f5fa466f-935a-4658-8294-28a2788e1ff4",
+  "https://cornerstoneseniormarketing.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=7cf4286a-2a64-4673-9fe0-1f581a86d827",
+  "https://leads.integrity.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=96fdff44-3365-4c2a-96e1-93432d12fc2a",
+  "https://thomasarts.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=a308c499-9fa4-49a5-8ad8-43b9dc78acdd",
+  "https://palmettosb.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=e710677c-e431-4cd9-9656-3fb2416a6a01",
+  "https://pennglobalmarketing.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=e72a2641-7665-4c6f-a62e-bae46289a8ac",
+  "https://silversneakers.planenroll.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=93644e80-473e-43fe-aaa9-014d2700800a",
+  "https://planenroll.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=4ee8bab4-f2b5-447e-8b2c-d41d18058fef",
+  "https://integrity.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=81e0f329-8561-4493-b6f3-e59d89055c91",
+  "https://westernassetprotection.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=a42588f5-79bf-44cf-b815-7c65b18e6e3d",
+  "https://westernpenn.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=6d3868a2-403a-4de6-b05c-cbb46cfab1ca",
+  "https://fidelisagents.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=165c7dd0-79ab-4249-a058-c620e17477ce",
+  "https://aegisfinancial.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=fb567448-b3cd-40bb-bd1e-8ef276afc60a",
+  "https://aep.tidewatermg.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=af31e850-bd25-467d-b125-b7703ac5d4d7",
+  "https://vip.tidewatermg.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=a5b9d3e0-26b2-4bc9-9f4e-7215156c002b",
+  "https://seniorinsurancespecialists.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=328304a1-a1de-4cbd-97b8-d20dd6685f2e",
+  "https://emrickgroup.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=ce4bbfa5-de48-428a-8509-e489b1bc49d8",
+  "https://americanseniorbenefits.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=2f24fc40-bab9-47d9-bd5b-aca58beb29eb",
+  "https://beneficiarychoice.org/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=4be88fcd-5ddd-4669-bf48-fb9672f992bc",
+  "https://fflnational.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=f7b717ba-fa95-4637-87be-025e74769468",
+  "https://hgicrusade.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=c4151920-3752-4287-b9ce-a2750e2a71dc",
+  "https://humanaachieve.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=4ca8c9ed-a628-4c53-8620-02c99533f004",
+  "https://leazergroup.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=03ef567d-5cc6-4f3d-933b-6b9a077da7b3",
+  "https://wapcon2024.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=13cc5f18-0392-462c-8105-fc955efe2e58",
+  "https://lionstreet.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=ebf18504-6165-4a69-ba0a-10dd8ad93adc",
+  "https://orgcorp.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=453c11ba-96c9-4783-a79c-f5a5d578b55b",
+  "https://www.deftresearch.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=77c93d88-35a9-4588-aa91-b0eab6a5b88f",
+  "https://appliedga.com/":
+    "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=c5f931f8-70cc-49ce-81d1-5f48b2b51f83",
+};
