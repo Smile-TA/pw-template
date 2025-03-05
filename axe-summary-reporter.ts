@@ -13,10 +13,12 @@ import { type Result as ViolationResult, NodeResult } from "axe-core";
 
 interface Violation extends ViolationResult {
   url: string;
+  testId: string;
 }
 
 interface violationNode extends NodeResult {
   url: string;
+  testId: string;
   description: string;
   help: string;
   helpUrl: string;
@@ -39,6 +41,7 @@ class AxeSummaryReporter implements Reporter {
       const modifiedNodes = violation.nodes.map((n) => {
         return {
           url: violation.url,
+          testId: violation.testId,
           description: violation.description,
           help: violation.help,
           helpUrl: violation.helpUrl,
@@ -83,6 +86,7 @@ class AxeSummaryReporter implements Reporter {
               return violations.map((violation: Violation) => ({
                 ...violation,
                 url: url,
+                testId: suite.id,
               }));
             })
         );
