@@ -6,6 +6,9 @@ import type {
   TestCase,
 } from "@playwright/test/reporter";
 
+import fs from "node:fs";
+import path from "path";
+
 import { type Result as ViolationResult, NodeResult } from "axe-core";
 
 interface Violation extends ViolationResult {
@@ -55,7 +58,15 @@ class AxeSummaryReporter implements Reporter {
         return violationNode.target[0];
       }
     );
-    console.log(grouped);
+    const filePath = path.join(process.cwd(), "wcag-summary", "out.json");
+    fs.writeFile(
+      filePath,
+      JSON.stringify(Object.fromEntries(grouped)),
+      (err) => {
+        if (err) throw err;
+        console.log("The file has been saved!");
+      }
+    );
     console.log(`Finished the run: ${result.status}`);
   }
 
