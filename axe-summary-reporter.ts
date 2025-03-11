@@ -41,7 +41,7 @@ class AxeSummaryReporter implements Reporter {
       const modifiedNodes = violation.nodes.map((n) => {
         return {
           url: violation.url,
-          testId: violation.testId,
+          testId: "http://localhost:9323/#?testId=" + violation.testId,
           description: violation.description,
           help: violation.help,
           helpUrl: violation.helpUrl,
@@ -51,9 +51,33 @@ class AxeSummaryReporter implements Reporter {
       acc.push(...modifiedNodes);
       return acc;
     }, [] as violationNode[]);
-    const grouped = Map.groupBy(nodes, (violationNode) => {
-      return violationNode.target.join(" ");
-    });
+    const grouped = Map.groupBy(
+      nodes.map((n) => {
+        const {
+          url,
+          testId,
+          description,
+          help,
+          helpUrl,
+          failureSummary,
+          target,
+          impact,
+        } = n;
+        return {
+          url,
+          testId,
+          description,
+          help,
+          helpUrl,
+          failureSummary,
+          target,
+          impact,
+        };
+      }),
+      (violationNode) => {
+        return violationNode.target.join(" ");
+      }
+    );
     const filePath = path.join(process.cwd(), "wcag-summary", "out.json");
     fs.writeFile(
       filePath,
