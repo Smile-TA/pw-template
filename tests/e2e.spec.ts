@@ -14,8 +14,6 @@ import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { pages } from "../pages";
 import { checkStagingLinks } from "../assertions/checkStagingLinks";
 
-// TODO: Add too many requests listener. Stop all workers.
-
 pages.forEach((p) => {
   const pageName = p === "/" ? "Home" : p;
   test.describe(`test ${pageName} page`, () => {
@@ -26,6 +24,15 @@ pages.forEach((p) => {
 
     test.beforeAll(async ({ browser }) => {
       page = await browser.newPage();
+      page.on("response", (data) => {
+        if (
+          data.status() === 429 ||
+          data.statusText().toLocaleLowerCase().includes("too many requests")
+        ) {
+          // TODO: improve error visibility in the report.
+          throw Error("Too many requests");
+        }
+      });
       await page.goto(p);
     });
     test.afterAll(async () => {
