@@ -51,16 +51,9 @@ class AxeSummaryReporter implements Reporter {
       acc.push(...modifiedNodes);
       return acc;
     }, [] as violationNode[]);
-    const grouped = Map.groupBy(
-      nodes,
-      // TODO: Need to consider all targets not just the first one. Keep an eye if any websites throw errors below
-      (violationNode) => {
-        if (violationNode.target.length > 1) {
-          throw Error("More than one target detected at: ");
-        }
-        return violationNode.target[0];
-      }
-    );
+    const grouped = Map.groupBy(nodes, (violationNode) => {
+      return violationNode.target.join(" ");
+    });
     const filePath = path.join(process.cwd(), "wcag-summary", "out.json");
     fs.writeFile(
       filePath,
