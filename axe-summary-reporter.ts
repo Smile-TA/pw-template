@@ -1,6 +1,5 @@
 import type {
   FullConfig,
-  FullResult,
   Reporter,
   Suite,
   TestCase,
@@ -31,7 +30,7 @@ class AxeSummaryReporter implements Reporter {
     this.suite = suite;
   }
 
-  onEnd(result: FullResult) {
+  onEnd() {
     // Can access all test results and attachments here.
     // Try to use the build pattern from the html reporter
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
@@ -84,10 +83,9 @@ class AxeSummaryReporter implements Reporter {
       JSON.stringify(Object.fromEntries(grouped)),
       (err) => {
         if (err) throw err;
-        console.log("The file has been saved!");
+        console.log("The wcag summary file has been saved!");
       }
     );
-    console.log(`Finished the run: ${result.status}`);
   }
 
   getViolations(suite: Suite | TestCase, res: Violation[] = []) {
