@@ -26,7 +26,6 @@ interface violationNode extends NodeResult {
 class AxeSummaryReporter implements Reporter {
   private suite!: Suite;
   onBegin(config: FullConfig, suite: Suite) {
-    console.log(`Starting the run with ${suite.allTests().length} tests`);
     this.suite = suite;
   }
 
@@ -51,8 +50,8 @@ class AxeSummaryReporter implements Reporter {
       return acc;
     }, [] as violationNode[]);
     const grouped = Map.groupBy(
-      nodes.map((n) => {
-        const {
+      nodes.map(
+        ({
           url,
           testId,
           description,
@@ -61,8 +60,7 @@ class AxeSummaryReporter implements Reporter {
           failureSummary,
           target,
           impact,
-        } = n;
-        return {
+        }) => ({
           url,
           testId,
           description,
@@ -71,21 +69,31 @@ class AxeSummaryReporter implements Reporter {
           failureSummary,
           target,
           impact,
-        };
-      }),
+        })
+      ),
       (violationNode) => {
         return violationNode.target.join(" ");
       }
     );
+    const reduced: {
+      [key: string]: {
+        description: string;
+        help: string;
+        helpUrl: string;
+        impact: string | null | undefined;
+        pages: { url: string; testId: string }[];
+      };
+    } = {};
+    for (const [k, v] of grouped) {
+      const { description, help, helpUrl, impact } = v[0];
+      reduced[k] = { description, help, helpUrl, impact, pages: [] };
+      reduced[k].pages = v.map(({ url, testId }) => ({ url, testId }));
+    }
     const filePath = path.join(process.cwd(), "wcag-summary", "out.json");
-    fs.writeFile(
-      filePath,
-      JSON.stringify(Object.fromEntries(grouped)),
-      (err) => {
-        if (err) throw err;
-        console.log("The wcag summary file has been saved!");
-      }
-    );
+    fs.writeFile(filePath, JSON.stringify(reduced), (err) => {
+      if (err) throw err;
+      console.log("The wcag summary file has been saved!");
+    });
   }
 
   getViolations(suite: Suite | TestCase, res: Violation[] = []) {
