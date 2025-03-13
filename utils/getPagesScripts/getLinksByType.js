@@ -1,7 +1,5 @@
 const axios = require("axios");
 
-// TODO: convert to TS, and convert to a pre-script to dynamically write to the pages file
-
 async function getPageLinks(baseUrl, postType) {
   try {
     const res = await axios.get(`${baseUrl}/wp-json/wp/v2/${postType}`);

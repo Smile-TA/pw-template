@@ -81,12 +81,20 @@ class AxeSummaryReporter implements Reporter {
         help: string;
         helpUrl: string;
         impact: string | null | undefined;
+        pageCount: number;
         pages: { url: string; testId: string }[];
       };
     } = {};
     for (const [k, v] of grouped) {
       const { description, help, helpUrl, impact } = v[0];
-      reduced[k] = { description, help, helpUrl, impact, pages: [] };
+      reduced[k] = {
+        description,
+        help,
+        helpUrl,
+        impact,
+        pageCount: v.length,
+        pages: [],
+      };
       reduced[k].pages = v.map(({ url, testId }) => ({ url, testId }));
     }
     const filePath = path.join(process.cwd(), "wcag-summary", "out.json");
