@@ -68,6 +68,14 @@ export default defineConfig({
       testMatch: "navVisibility.spec.ts",
     },
 
+    /**
+     * Run VRT accross browsers
+     */
+    {
+      name: "cross-browser-vrt",
+      testMatch: "crossBrowserVrt.spec.ts",
+    },
+
     /*
      * Run VRT on different viewport sizes.
      * To run only vrt projects: npx playwright test --project="vrt-*"
