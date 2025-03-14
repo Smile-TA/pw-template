@@ -193,7 +193,7 @@ export const trustArcLinks: { [key: string]: string } = {
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=7cf4286a-2a64-4673-9fe0-1f581a86d827",
   "https://leads.integrity.com/":
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=96fdff44-3365-4c2a-96e1-93432d12fc2a",
-  "https://thomasarts.com/":
+  "https://www.thomasarts.com/":
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=a308c499-9fa4-49a5-8ad8-43b9dc78acdd",
   "https://palmettosb.com/":
     "https://submit-irm.trustarc.com/services/validation/d14968e7-edec-4831-b5f2-c494567844f6/?brandId=e710677c-e431-4cd9-9656-3fb2416a6a01",

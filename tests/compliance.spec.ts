@@ -19,7 +19,7 @@ if (!playwrightConfig.use?.baseURL) {
 }
 const trustArcUrl = trustArcLinks[playwrightConfig.use?.baseURL];
 const privacyPolicyUrl = "/privacy-policy";
-const consumerHealthUrl = "/consumer-health-data-privacy-notice/";
+const consumerHealthUrl = "/consumer-health-data-policy/";
 test.describe("privacy page", () => {
   test("test trust arc url", async ({ page }) => {
     expect(trustArcUrl).toBeTruthy();
