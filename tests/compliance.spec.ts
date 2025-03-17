@@ -18,8 +18,9 @@ if (!playwrightConfig.use?.baseURL) {
   throw Error("Base url is missing");
 }
 const trustArcUrl = trustArcLinks[playwrightConfig.use?.baseURL];
-const privacyPolicyUrl = "/privacy-policy";
-const consumerHealthUrl = "/consumer-health-data-policy/";
+const privacyPolicyUrl = process.env.PRIVACY_POLICY_LINK ?? "/privacy-policy";
+const consumerHealthUrl =
+  process.env.CONSUMER_HEALTH_LINK ?? "/consumer-health-data-policy/";
 test.describe("privacy page", () => {
   test("test trust arc url", async ({ page }) => {
     expect(trustArcUrl).toBeTruthy();
