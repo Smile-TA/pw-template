@@ -33,7 +33,13 @@ pages.forEach((p) => {
           throw Error("Too many requests");
         }
       });
-      await page.goto(p);
+      await page.goto(p, {
+        waitUntil: process.env.WAIT_UNTIL_OPTION as
+          | "load"
+          | "domcontentloaded"
+          | "networkidle"
+          | "commit",
+      });
     });
     test.afterAll(async () => {
       await page.close();
@@ -124,7 +130,13 @@ test("Check privacy page date and text", async ({ page }) => {
   if (!privacyPage) {
     test.skip(!privacyPage, "Privacy Page not found");
   } else {
-    await page.goto(privacyPage);
+    await page.goto(privacyPage, {
+      waitUntil: process.env.WAIT_UNTIL_OPTION as
+        | "load"
+        | "domcontentloaded"
+        | "networkidle"
+        | "commit",
+    });
     await checkPrivacyText(page);
     await checkLastUpdated(page);
   }
