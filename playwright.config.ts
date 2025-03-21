@@ -49,7 +49,8 @@ export default defineConfig({
     {
       name: "e2e",
       use: { ...devices["Desktop Chrome"] },
-      testIgnore: /\b(vrt.spec.ts|navVisibility.spec.ts|compliance.spec.ts)\b/,
+      testIgnore:
+        /\b(vrt.spec.ts|navVisibility.spec.ts|compliance.spec.ts|crossBrowserVrt.spec.ts)\b/,
     },
     // TODO: Change to use temporary dir or add cleanup step
     {
@@ -58,7 +59,8 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         storageState: "playwright/.auth/user.json",
       },
-      testIgnore: /\b(vrt.spec.ts|navVisibility.spec.ts|compliance.spec.ts)\b/,
+      testIgnore:
+        /\b(vrt.spec.ts|navVisibility.spec.ts|compliance.spec.ts|crossBrowserVrt.spec.ts)\b/,
       dependencies: ["setup"],
     },
 
