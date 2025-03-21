@@ -14,7 +14,13 @@ pages.forEach((p) => {
         throw Error("Too many requests");
       }
     });
-    await page.goto(p);
+    await page.goto(p, {
+      waitUntil: process.env.WAIT_UNTIL_OPTION as
+        | "load"
+        | "domcontentloaded"
+        | "networkidle"
+        | "commit",
+    });
     await checkWCAG(page, testInfo);
   });
 });
