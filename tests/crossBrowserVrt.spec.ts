@@ -3,8 +3,8 @@ import { pages } from "../pages";
 import path from "path";
 const options = {
   screen: {
-    width: 1920,
-    height: 1080,
+    width: 1792,
+    height: 1120,
   },
   viewport: {
     width: 1280,
