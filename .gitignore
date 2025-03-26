@@ -10,4 +10,3 @@ tests/*-snapshots/
 playwright/.auth
 ignore-*
 .vscode/
-wcag-summary/
