@@ -26,6 +26,7 @@ npm run test -- --project e2e-auth
 ## List of test cases
 
 ### E2E Project
+
 - Each page should have a favicon link
 - Each page should have only one h1 
 - Check each page for placeholder text such as:
@@ -41,7 +42,6 @@ npm run test -- --project e2e-auth
 - Check that skip link is present and implemented to set standards.
 - Check that tel links match tel href
 - Check that staging links do not exist on prod
--
 
 Tested only on prod:
 
@@ -50,7 +50,16 @@ Tested only on prod:
 - Verify correct admin email. (Requires ADMIN_USR_NAME and ADMIN_USR_PSW in the .env file.)
 
 ### Cross Browser VRT Project
+
 - Compare visual differences across browsers
+
+### Nav Visibility Project
+
+- Given a breakpoint and two selectors, verify that navigation is visible at all screen sizes
+
+### Compliance Project
+
+- Given routes to compliance pages, verify the content is correct
 
 ## References
 
