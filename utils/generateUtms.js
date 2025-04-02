@@ -2,10 +2,10 @@ const t = process.argv[2];
 
 const utms = [
   "utm_content",
-  // "utm_medium",
-  // "utm_campaign",
-  // "utm_source",
-  // "utm_term",
+  "utm_medium",
+  "utm_campaign",
+  "utm_source",
+  "utm_term",
   "gclid",
   "maclid",
 ];
