@@ -1,4 +1,4 @@
-import { test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { checkH1Count } from "../assertions/checkH1";
 import { checkGTM } from "../assertions/checkGTM";
 import { checkFavicon } from "../assertions/checkFavicon";
@@ -44,7 +44,9 @@ pages.forEach((p) => {
     test.afterAll(async () => {
       await page.close();
     });
-
+    test("Check Too Many Requests", async () => {
+      await expect(page.getByText("too many requests")).not.toBeVisible();
+    });
     test("Check favicon", async () => {
       await checkFavicon(page);
     });

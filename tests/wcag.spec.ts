@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { checkWCAG } from "../assertions/checkWCAG";
 import { pages } from "../pages";
 
@@ -21,6 +21,7 @@ pages.forEach((p) => {
         | "networkidle"
         | "commit",
     });
+    await expect(page.getByText("too many requests")).not.toBeVisible();
     await checkWCAG(page, testInfo);
   });
 });
