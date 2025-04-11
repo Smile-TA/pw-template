@@ -13,6 +13,7 @@ import { checkText } from "../assertions/checkText";
 import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { pages } from "../pages";
 import { checkStagingLinks } from "../assertions/checkStagingLinks";
+//TODO: add check for console log error
 
 pages.forEach((p) => {
   const pageName = p === "/" ? "Home" : p;
