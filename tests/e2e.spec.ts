@@ -13,7 +13,8 @@ import { checkText } from "../assertions/checkText";
 import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { pages } from "../pages";
 import { checkStagingLinks } from "../assertions/checkStagingLinks";
-//TODO: add check for console log error
+
+type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
 pages.forEach((p) => {
   const pageName = p === "/" ? "Home" : p;
@@ -22,6 +23,7 @@ pages.forEach((p) => {
      * @see {@link https://playwright.dev/docs/test-retries#reuse-single-page-between-tests Playwright doc reference}
      */
     let page: Page;
+    const consoleErrors = new Map();
 
     test.beforeAll(async ({ browser }) => {
       page = await browser.newPage();
@@ -34,14 +36,30 @@ pages.forEach((p) => {
           throw Error("Too many requests");
         }
       });
+
+      page.on("console", (msg) => {
+        if (msg.type() === "error") {
+          if (consoleErrors.has(page.url())) {
+            consoleErrors.get(page.url()).push(msg.text());
+          } else {
+            consoleErrors.set(page.url(), [msg.text()]);
+          }
+        }
+      });
+
+      page.on("pageerror", (error) => {
+        if (consoleErrors.has(page.url())) {
+          consoleErrors.get(page.url()).push(error.message);
+        } else {
+          consoleErrors.set(page.url(), [error.message]);
+        }
+      });
+
       await page.goto(p, {
-        waitUntil: process.env.WAIT_UNTIL_OPTION as
-          | "load"
-          | "domcontentloaded"
-          | "networkidle"
-          | "commit",
+        waitUntil: process.env.WAIT_UNTIL_OPTION as WAIT_UNTIL_OPTION,
       });
     });
+
     test.afterAll(async () => {
       await page.close();
     });
@@ -108,6 +126,9 @@ pages.forEach((p) => {
     test("Check that placeholder text does not exist", async () => {
       await checkText(page);
     });
+    test("Check console errors", async () => {
+      expect.soft(consoleErrors.get(page.url())).toBeUndefined();
+    });
   });
 });
 
@@ -134,11 +155,7 @@ test("Check privacy page date and text", async ({ page }) => {
     test.skip(!privacyPage, "Privacy Page not found");
   } else {
     await page.goto(privacyPage, {
-      waitUntil: process.env.WAIT_UNTIL_OPTION as
-        | "load"
-        | "domcontentloaded"
-        | "networkidle"
-        | "commit",
+      waitUntil: process.env.WAIT_UNTIL_OPTION as WAIT_UNTIL_OPTION,
     });
     await checkPrivacyText(page);
     await checkLastUpdated(page);
