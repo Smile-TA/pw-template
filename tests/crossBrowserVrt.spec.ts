@@ -30,7 +30,7 @@ test.describe("compare vrt across browsers", () => {
         screenshotOption
       );
     });
-    test(`compare ${p} chrome to firefox`, async () => {
+    test(`compare ${p === "/" ? "Home" : p} chrome to firefox`, async () => {
       const firefoxPage = await (await firefox.launch()).newPage(options);
       await firefoxPage.goto(p);
       await expect(firefoxPage).toHaveScreenshot(
@@ -39,7 +39,7 @@ test.describe("compare vrt across browsers", () => {
       );
     });
 
-    test(`compare ${p} chrome to webkit`, async () => {
+    test(`compare ${p === "/" ? "Home" : p} chrome to webkit`, async () => {
       const webkitPage = await (await webkit.launch()).newPage(options);
       await webkitPage.goto(p);
       await expect(webkitPage).toHaveScreenshot(
