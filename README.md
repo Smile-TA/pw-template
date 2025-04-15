@@ -3,6 +3,7 @@
 ## Install
 
 ```sh
+# Node version v23.10.0
 npm install
 ```
 
@@ -20,6 +21,12 @@ npm run test:e2e
 
 # Runs the auth e2e test suit. Don't forget to add the TEST_USR_* variables into the .env file!
 npm run test -- --project e2e-auth
+```
+
+### Quickstart
+```sh
+cp example.env .env
+node utils/addBaseUrl.js REPLACE_WITH_TARGET_URL && node utils/generatePagesFile.js && npm run test:e2e
 ```
 
 
@@ -42,6 +49,8 @@ npm run test -- --project e2e-auth
 - Check that skip link is present and implemented to set standards.
 - Check that tel links match tel href
 - Check that staging links do not exist on prod
+- Check that console errors do not exist
+
 
 Tested only on prod:
 
