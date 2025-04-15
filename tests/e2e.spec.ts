@@ -69,7 +69,7 @@ pages.forEach((p) => {
     test("Check favicon", async () => {
       await checkFavicon(page);
     });
-    test("Check GTM", async () => {
+    test("Check GTM", { tag: "@ProdOnly" }, async () => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
@@ -91,21 +91,25 @@ pages.forEach((p) => {
       await checkTelLinks(page);
     });
 
-    test("Check staging links do not exist on prod", async () => {
-      if (process.env.BASE_URL) {
-        test.skip(
-          process.env.BASE_URL.includes("staging"),
-          "Staging links are checked only on production"
-        );
+    test(
+      "Check staging links do not exist on prod",
+      { tag: "@ProdOnly" },
+      async () => {
+        if (process.env.BASE_URL) {
+          test.skip(
+            process.env.BASE_URL.includes("staging"),
+            "Staging links are checked only on production"
+          );
+        }
+        await checkStagingLinks(page);
       }
-      await checkStagingLinks(page);
-    });
+    );
 
     test("Check robots", async () => {
       await checkRobots(page);
     });
 
-    test("Check SEO", async () => {
+    test("Check SEO", { tag: "@ProdOnly" }, async () => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
