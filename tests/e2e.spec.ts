@@ -83,6 +83,7 @@ pages.forEach((p) => {
       await checkH1Count(page);
     });
 
+    //TODO: Add check internal links should not open in a new tab
     test("Check outbound links", async ({ baseURL }) => {
       await checkOutboundLinks(page, baseURL);
     });
