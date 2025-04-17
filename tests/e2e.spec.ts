@@ -16,6 +16,7 @@ import { checkStagingLinks } from "../assertions/checkStagingLinks";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
+// TODO: add image file size check 
 pages.forEach((p) => {
   const pageName = p === "/" ? "Home" : p;
   test.describe(`test ${pageName} page`, () => {
@@ -24,6 +25,7 @@ pages.forEach((p) => {
      */
     let page: Page;
     const consoleErrors = new Map();
+    const images: [string, number][] = [];
 
     test.beforeAll(async ({ browser }) => {
       page = await browser.newPage();
@@ -45,6 +47,15 @@ pages.forEach((p) => {
             consoleErrors.set(page.url(), [msg.text()]);
           }
         }
+      });
+
+      await page.route("**/*.{png,jpg,jpeg,svg}", async (route) => {
+        const res = await route.fetch();
+        if (res.headers()["content-length"]) {
+          const len = Number.parseInt(res.headers()["content-length"]);
+          images.push([route.request().url(), len]);
+        }
+        await route.fulfill();
       });
 
       page.on("pageerror", (error) => {
@@ -133,6 +144,17 @@ pages.forEach((p) => {
     });
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
+    });
+    test("Check image file sizes", async () => {
+      const imageThresholdKB = 500 * 1000;
+      for (const image of images) {
+        expect
+          .soft(
+            image[1],
+            `Image from ${image[0]} is larger than threshold of ${imageThresholdKB}`
+          )
+          .toBeLessThan(imageThresholdKB);
+      }
     });
   });
 });
