@@ -50,7 +50,7 @@ node utils/addBaseUrl.js REPLACE_WITH_TARGET_URL && node utils/generatePagesFile
 - Check that tel links match tel href
 - Check that staging links do not exist on prod
 - Check that console errors do not exist
-
+- Check for image file sizes
 
 Tested only on prod:
 
