@@ -16,7 +16,7 @@ import { checkStagingLinks } from "../assertions/checkStagingLinks";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
-// TODO: add image file size check 
+// TODO: add image file size check
 pages.forEach((p) => {
   const pageName = p === "/" ? "Home" : p;
   test.describe(`test ${pageName} page`, () => {
@@ -145,15 +145,34 @@ pages.forEach((p) => {
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
-    test("Check image file sizes", async () => {
-      const imageThresholdKB = 500 * 1000;
+    test("Check for image file sizes larger than 120kb", async () => {
+      const lowerImageThresholdKB = 120 * 1000;
+      const upperImageThresholdKB = 250 * 1000;
       for (const image of images) {
-        expect
-          .soft(
-            image[1],
-            `Image from ${image[0]} is larger than threshold of ${imageThresholdKB}`
-          )
-          .toBeLessThan(imageThresholdKB);
+        if (
+          image[1] >= lowerImageThresholdKB &&
+          image[1] <= upperImageThresholdKB
+        ) {
+          expect
+            .soft(
+              image[1],
+              `Image from ${image[0]} is larger than threshold of ${lowerImageThresholdKB}`
+            )
+            .toBeLessThanOrEqual(lowerImageThresholdKB);
+        }
+      }
+    });
+    test("Check for image file sizes larger than 250kb", async () => {
+      const imageThresholdKB = 250 * 1000;
+      for (const image of images) {
+        if (image[1] >= imageThresholdKB) {
+          expect
+            .soft(
+              image[1],
+              `Image from ${image[0]} is larger than threshold of ${imageThresholdKB}`
+            )
+            .toBeLessThanOrEqual(imageThresholdKB);
+        }
       }
     });
   });
