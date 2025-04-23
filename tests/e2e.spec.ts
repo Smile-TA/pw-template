@@ -13,6 +13,7 @@ import { checkText } from "../assertions/checkText";
 import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { pages } from "../pages";
 import { checkStagingLinks } from "../assertions/checkStagingLinks";
+import { scrollToBottom } from "../utils/scrollToBottom";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
@@ -27,16 +28,38 @@ pages.forEach((p) => {
     const consoleErrors = new Map();
     const images: [string, number][] = [];
 
-    test.beforeAll(async ({ browser }) => {
+    test.beforeAll(async ({ browser, baseURL }) => {
       page = await browser.newPage();
-      page.on("response", (data) => {
+      page.on("response", async (res) => {
         if (
-          data.status() === 429 ||
-          data.statusText().toLocaleLowerCase().includes("too many requests")
+          res.status() === 429 ||
+          res.statusText().toLocaleLowerCase().includes("too many requests")
         ) {
           // TODO: improve error visibility in the report.
           throw Error("Too many requests");
         }
+
+        const url = res.url();
+        if (!url.startsWith(baseURL ?? "EMPTY")) {
+          return;
+        }
+        const contentType = res.headers()["content-type"] || "";
+        if (!contentType.startsWith("image/")) {
+          return;
+        }
+        let size = parseInt(res.headers()["content-length"]);
+        if (!size || isNaN(size)) {
+          try {
+            const body = await res.body();
+            size = body.length;
+          } catch (error) {
+            if (error instanceof Error) {
+              console.error(`Failed to get body for ${url}`, error.message);
+            }
+            return;
+          }
+        }
+        images.push([url, size]);
       });
 
       page.on("console", (msg) => {
@@ -47,15 +70,6 @@ pages.forEach((p) => {
             consoleErrors.set(page.url(), [msg.text()]);
           }
         }
-      });
-
-      await page.route("**/*.{png,jpg,jpeg,svg}", async (route) => {
-        const res = await route.fetch();
-        if (res.headers()["content-length"]) {
-          const len = Number.parseInt(res.headers()["content-length"]);
-          images.push([route.request().url(), len]);
-        }
-        await route.fulfill();
       });
 
       page.on("pageerror", (error) => {
@@ -146,30 +160,18 @@ pages.forEach((p) => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
     test("Check for image file sizes larger than 120kb", async () => {
-      const lowerImageThresholdKB = 120 * 1000;
-      const upperImageThresholdKB = 250 * 1000;
-      for (const image of images) {
-        if (
-          image[1] >= lowerImageThresholdKB &&
-          image[1] <= upperImageThresholdKB
-        ) {
-          expect
-            .soft(
-              image[1],
-              `Image from ${image[0]} is larger than threshold of ${lowerImageThresholdKB}`
-            )
-            .toBeLessThanOrEqual(lowerImageThresholdKB);
-        }
-      }
-    });
-    test("Check for image file sizes larger than 250kb", async () => {
-      const imageThresholdKB = 250 * 1000;
+      await page.evaluate(scrollToBottom);
+      // await page.evaluate(waitForImagesToLoad);
+      await page.waitForTimeout(5000);
+      const imageThresholdKB = 120 * 1024;
       for (const image of images) {
         if (image[1] >= imageThresholdKB) {
           expect
             .soft(
               image[1],
-              `Image from ${image[0]} is larger than threshold of ${imageThresholdKB}`
+              `Image from ${image[0]} of size ${Math.round(
+                image[1] / 1000
+              )}kB is larger than threshold of ${imageThresholdKB / 1024}kB`
             )
             .toBeLessThanOrEqual(imageThresholdKB);
         }
