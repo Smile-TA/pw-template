@@ -8,6 +8,10 @@ import dotenv from "dotenv";
 import path from "path";
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
+if (!process.env.BASE_URL) {
+  throw new Error("Base url is missing");
+}
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
