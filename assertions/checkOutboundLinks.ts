@@ -7,11 +7,6 @@ export async function checkOutboundLinks(
   page: Page,
   baseURL: string | undefined
 ) {
-  let newBaseUrl: string = baseURL ?? "";
-  newBaseUrl = newBaseUrl.endsWith("/") ? newBaseUrl.slice(0, -1) : newBaseUrl;
-  newBaseUrl = newBaseUrl.indexOf("www.")
-    ? newBaseUrl.replace("www.", "")
-    : newBaseUrl;
   const links = await page.evaluate(() => {
     return [...document.querySelectorAll("a")].map((link) => {
       return {
@@ -30,7 +25,7 @@ export async function checkOutboundLinks(
       href.slice(0, 4) === "tel:" ||
       href.slice(0, 7) === "mailto:" ||
       href.indexOf("http") !== 0 ||
-      getLinkBaseURL(href) === newBaseUrl
+      isSameOrigin(href, baseURL ?? "")
     ) {
       continue;
     }
@@ -43,10 +38,8 @@ export async function checkOutboundLinks(
   }
 }
 
-const getLinkBaseURL = (href: string): string => {
-  const pathArray = href.split("/");
-  const protocol = pathArray[0];
-  const host = pathArray[2];
-  const url = protocol + "//" + host.replace("www.", "");
-  return url.endsWith("/") ? url.slice(0, -1) : url;
+const isSameOrigin = (href: string, baseUrl: string): boolean => {
+  const newHref = href.replace("www.", "");
+  const newBase = baseUrl.replace("www.", "");
+  return new URL(newHref).origin === new URL(newBase).origin;
 };
