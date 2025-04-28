@@ -156,6 +156,7 @@ pages.forEach((p) => {
     test("Check that placeholder text does not exist", async () => {
       await checkText(page);
     });
+    // TODO: add integrity marketing name and url flag.
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
