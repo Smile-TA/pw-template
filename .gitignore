@@ -10,3 +10,4 @@ tests/*-snapshots/
 playwright/.auth
 ignore-*
 .vscode/
+.DS_Store
