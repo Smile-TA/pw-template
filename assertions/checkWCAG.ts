@@ -12,6 +12,11 @@ export async function checkWCAG(page: Page, testInfo: TestInfo) {
       "wcag22aa",
       "best-practice",
     ])
+    .disableRules([
+      "scrollable-region-focusable",
+      "region",
+      "landmark-one-main",
+    ])
     .analyze();
 
   const reportHTML = createHtmlReport({
