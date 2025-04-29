@@ -14,8 +14,8 @@ export async function checkWCAG(page: Page, testInfo: TestInfo) {
     ])
     .disableRules([
       "scrollable-region-focusable",
-      "region",
-      "landmark-one-main",
+      // "region",
+      // "landmark-one-main",
     ])
     .analyze();
 
