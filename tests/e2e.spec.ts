@@ -156,7 +156,11 @@ pages.forEach((p) => {
     test("Check that placeholder text does not exist", async () => {
       await checkText(page);
     });
-    // TODO: add integrity marketing name and url flag.
+    test("Reference to old integrity domain should not exist", async () => {
+      await expect(
+        page.locator('a[href*="integritymarketing.com"]')
+      ).toHaveCount(0);
+    });
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
