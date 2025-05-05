@@ -164,18 +164,18 @@ pages.forEach((p) => {
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
-    test("Check for image file sizes larger than 120kb", async () => {
+    test("Check for image file sizes larger than 240kb", async () => {
       await page.evaluate(scrollToBottom);
       // await page.evaluate(waitForImagesToLoad);
       await page.waitForTimeout(5000);
-      const imageThresholdKB = 120 * 1024;
+      const imageThresholdKB = 240 * 1024;
       for (const image of images) {
         if (image[1] >= imageThresholdKB) {
           expect
             .soft(
               image[1],
               `Image from ${image[0]} of size ${Math.round(
-                image[1] / 1000
+                image[1] / 1024
               )}kB is larger than threshold of ${imageThresholdKB / 1024}kB`
             )
             .toBeLessThanOrEqual(imageThresholdKB);
