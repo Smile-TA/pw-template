@@ -113,7 +113,10 @@ pages.forEach((p) => {
       await checkOutboundLinks(page, baseURL);
     });
 
-    test("Check tel links match inner text", async () => {
+    test("Check tel links match inner text", async ({ baseURL }) => {
+      if (baseURL?.includes("planenroll") && !baseURL?.includes("staging")) {
+        await page.waitForTimeout(1000);
+      }
       await checkTelLinks(page);
     });
 
