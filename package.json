@@ -7,7 +7,8 @@
     "pretest": "npm run lint",
     "pretest:e2e": "npm run lint",
     "test": "playwright test --workers 3",
-    "test:e2e": "playwright test --workers 3 --project e2e"
+    "test:e2e": "playwright test --workers 3 --project e2e",
+    "postinstall": "patch-package"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
     "axe-html-reporter": "^2.2.11",
     "axios": "^1.7.9",
     "eslint": "^9.16.0",
+    "patch-package": "^8.0.0",
     "sitemapper": "^3.2.12",
     "typescript-eslint": "^8.18.0"
   },
