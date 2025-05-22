@@ -8,11 +8,19 @@ export async function checkTelLinks(page: Page) {
         .filter((c) => c.charCodeAt(0) > 47 && c.charCodeAt(0) < 58)
         .join("");
 
+    const removeLeadingOne = (s: string) => {
+      if (s[0] === "1") {
+        return s.replace("1", "");
+      }
+      return s;
+    };
     return [...document.querySelectorAll("a")]
       .filter((link) => link.getAttribute("href")?.indexOf("tel:") === 0)
       .map((link) => {
-        const hrefTel = keepOnlyNumbers(link.getAttribute("href") ?? "");
-        const textTel = keepOnlyNumbers(link.innerText);
+        const hrefTel = removeLeadingOne(
+          keepOnlyNumbers(link.getAttribute("href") ?? "")
+        );
+        const textTel = removeLeadingOne(keepOnlyNumbers(link.innerText));
         return {
           href: hrefTel,
           innerText: textTel,
