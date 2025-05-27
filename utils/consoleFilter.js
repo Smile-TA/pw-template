@@ -28,3 +28,15 @@ function hideTextInChip(text) {
     .forEach((e) => (e.hidden = true));
 }
 hideTextInChip("Check Skip Link");
+
+function extractLinks(baseUrl) {
+  return [
+    ...$$(
+      "div.test-file-test.test-file-test-outcome-unexpected div.hbox a[title]"
+    ),
+  ]
+    .map((e) => e.innerText)
+    .map((s) => s.substring(s.indexOf("test ") + 5, s.indexOf(" page ›")))
+    .map((s) => (s === "Home" ? "/" : s))
+    .map((s) => baseUrl + s);
+}
