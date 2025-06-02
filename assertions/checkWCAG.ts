@@ -16,6 +16,8 @@ export async function checkWCAG(page: Page, testInfo: TestInfo) {
       "scrollable-region-focusable",
       // "region",
       // "landmark-one-main",
+      // "landmark-unique",
+      // "landmark-no-duplicate-contentinfo",
     ])
     .analyze();
 
