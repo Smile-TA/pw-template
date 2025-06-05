@@ -127,7 +127,13 @@ export default defineConfig({
       testMatch: "vrt.spec.ts",
       dependencies: ["setup"],
     },
-
+    {
+      name: "repeat",
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+      testMatch: "repeatSame.spec.ts",
+    },
     /* Test against branded browsers. */
     // {
     //   name: 'Microsoft Edge',
