@@ -35,6 +35,10 @@ class AxeSummaryReporter implements Reporter {
     // https://github.com/microsoft/playwright/blob/main/packages/playwright/src/reporters/html.ts#L241
     const suites = this.suite;
     const violationsDecoded = this.getViolations(suites).flat();
+    if (violationsDecoded.length === 0) {
+      console.log("No WCAG violations to summarize!");
+      return;
+    }
     const nodes = violationsDecoded.reduce((acc, violation) => {
       const modifiedNodes = violation.nodes.map((n) => {
         return {
