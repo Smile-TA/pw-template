@@ -49,6 +49,11 @@ class AxeSummaryReporter implements Reporter {
       acc.push(...modifiedNodes);
       return acc;
     }, [] as violationNode[]);
+    this.writeJSONSummary(nodes);
+    this.writeCSVSummary(nodes);
+  }
+
+  writeJSONSummary(nodes: violationNode[]) {
     const grouped = Map.groupBy(
       nodes.map(
         ({
@@ -97,10 +102,49 @@ class AxeSummaryReporter implements Reporter {
       };
       reduced[k].pages = v.map(({ url, testId }) => ({ url, testId }));
     }
-    const filePath = path.join(process.cwd(), "wcag-summary", "out.json");
+    const filePath = path.join(process.cwd(), "wcag-summary", "summary.json");
     fs.writeFile(filePath, JSON.stringify(reduced), (err) => {
       if (err) throw err;
-      console.log("The wcag summary file has been saved!");
+      console.log("The json wcag summary file has been saved!");
+    });
+  }
+
+  writeCSVSummary(nodes: violationNode[]) {
+    const filePath = path.join(process.cwd(), "wcag-summary", "summary.csv");
+    const headers = [
+      "url",
+      "testId",
+      "description",
+      "help",
+      "helpUrl",
+      "impact",
+      "target",
+    ];
+    let outString = "";
+    outString +=
+      Object.keys(nodes[0])
+        .filter((k) => headers.includes(k))
+        .join(",") + "\n";
+    outString += nodes
+      .map((node) =>
+        Object.entries(node)
+          .map((cell) => {
+            if (headers.includes(cell[0])) {
+              return `"${
+                typeof cell[1] === "string"
+                  ? cell[1].replaceAll("\n", " ")
+                  : cell[1].join("").replaceAll('"', "'")
+              }"`;
+            }
+            return null;
+          })
+          .filter(Boolean)
+          .join(",")
+      )
+      .join("\n");
+    fs.writeFile(filePath, outString, (err) => {
+      if (err) throw err;
+      console.log("The csv wcag summary file has been saved!");
     });
   }
 
