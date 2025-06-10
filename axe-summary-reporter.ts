@@ -122,7 +122,7 @@ class AxeSummaryReporter implements Reporter {
     ];
     let outString = "";
     outString +=
-      Object.keys(nodes[0])
+      Object.keys(nodes[0] ? nodes[0] : {})
         .filter((k) => headers.includes(k))
         .join(",") + "\n";
     outString += nodes
