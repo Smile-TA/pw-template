@@ -5,6 +5,7 @@
 ```sh
 # Node version v23.10.0
 npm install
+npx playwright install --with-deps
 ```
 
 ## Setup
