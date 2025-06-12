@@ -17,7 +17,6 @@ import { scrollToBottom } from "../utils/scrollToBottom";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
-// TODO: add image file size check
 pages.forEach((p) => {
   const pageName = p === "/" ? "Home" : p;
   test.describe(`test ${pageName} page`, () => {
