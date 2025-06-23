@@ -106,7 +106,7 @@ class AxeSummaryReporter implements Reporter {
       };
       reduced[k].pages = v.map(({ url, testId }) => ({ url, testId }));
     }
-    const filePath = path.join(process.cwd(), "wcag-summary", "summary.json");
+    const filePath = path.join(process.cwd(), "summaries", "wcag-summary.json");
     fs.writeFile(filePath, JSON.stringify(reduced), (err) => {
       if (err) throw err;
       console.log("The json wcag summary file has been saved!");
@@ -114,7 +114,7 @@ class AxeSummaryReporter implements Reporter {
   }
 
   writeCSVSummary(nodes: violationNode[]) {
-    const filePath = path.join(process.cwd(), "wcag-summary", "summary.csv");
+    const filePath = path.join(process.cwd(), "summaries", "wcag-summary.csv");
     const headers = [
       "url",
       "testId",

@@ -166,13 +166,15 @@ pages.forEach((p) => {
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
-    test("Check for image file sizes larger than 120kb", async () => {
+    test("Check for image file sizes larger than 120kb", async ({}, testInfo) => {
       await page.evaluate(scrollToBottom);
       // await page.evaluate(waitForImagesToLoad);
       await page.waitForTimeout(5000);
       const imageThresholdKB = 120 * 1024;
+      const failedImages = [];
       for (const image of images) {
         if (image[1] >= imageThresholdKB) {
+          failedImages.push(image);
           expect
             .soft(
               image[1],
@@ -183,6 +185,10 @@ pages.forEach((p) => {
             .toBeLessThanOrEqual(imageThresholdKB);
         }
       }
+      await testInfo.attach("large-images", {
+        body: JSON.stringify(failedImages),
+        contentType: "application/json",
+      });
     });
   });
 });

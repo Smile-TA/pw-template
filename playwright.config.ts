@@ -30,6 +30,7 @@ export default defineConfig({
     ["list"],
     ["html", { open: "always" }],
     ["./axe-summary-reporter.ts"],
+    ["./image-file-summary-reporter.ts"],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
