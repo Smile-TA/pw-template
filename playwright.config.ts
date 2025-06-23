@@ -29,8 +29,8 @@ export default defineConfig({
   reporter: [
     ["list"],
     ["html", { open: "always" }],
-    ["./axe-summary-reporter.ts"],
-    ["./image-file-summary-reporter.ts"],
+    ["./custom-reporters/axe-summary-reporter.ts"],
+    ["./custom-reporters/image-file-summary-reporter.ts"],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
