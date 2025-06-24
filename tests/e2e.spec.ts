@@ -185,10 +185,15 @@ pages.forEach((p) => {
             .toBeLessThanOrEqual(imageThresholdKB);
         }
       }
-      await testInfo.attach("large-images", {
-        body: JSON.stringify(failedImages),
-        contentType: "application/json",
-      });
+      if (failedImages.length) {
+        await testInfo.attach("large-images", {
+          body: JSON.stringify({
+            pageSrc: page.url(),
+            fileSrc: failedImages.map((image) => image[0]),
+          }),
+          contentType: "application/json",
+        });
+      }
     });
   });
 });

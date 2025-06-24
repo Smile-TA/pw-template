@@ -39,7 +39,7 @@ class ImageFileSummaryReporter implements Reporter {
             .filter((attachment) => attachment.name === "large-images")
             .map((attachment) => {
               const body = JSON.parse(attachment.body?.toString("utf-8") ?? "");
-              return body.map((attachment: string[]) => attachment[0]);
+              return body;
             })
         );
       });
