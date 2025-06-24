@@ -16,6 +16,10 @@ class ImageFileSummaryReporter implements Reporter {
 
   onEnd() {
     const images = this.getFailedImages(this.suite).flat();
+    if (images.length === 0) {
+      console.log(" No large file size images found!");
+      return;
+    }
     const filePath = path.join(
       process.cwd(),
       "summaries",
