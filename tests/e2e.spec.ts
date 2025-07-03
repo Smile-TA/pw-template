@@ -189,7 +189,10 @@ pages.forEach((p) => {
         await testInfo.attach("large-images", {
           body: JSON.stringify({
             pageSrc: page.url(),
-            fileSrc: failedImages.map((image) => image[0]),
+            fileSrc: failedImages.map((img) => ({
+              url: img[0],
+              size: img[1] / 1024,
+            })),
           }),
           contentType: "application/json",
         });
