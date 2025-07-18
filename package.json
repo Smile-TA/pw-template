@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "axe-core": "^4.10.2",
+    "csv-stringify": "^6.6.0",
     "dotenv": "^16.4.7"
   }
 }

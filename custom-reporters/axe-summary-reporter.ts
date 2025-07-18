@@ -8,6 +8,8 @@ import type {
 import fs from "node:fs";
 import path from "path";
 
+import { stringify } from "csv-stringify/sync";
+
 import { type Result as ViolationResult, NodeResult } from "axe-core";
 
 interface Violation extends ViolationResult {
@@ -117,35 +119,36 @@ class AxeSummaryReporter implements Reporter {
     const filePath = path.join(process.cwd(), "summaries", "wcag-summary.csv");
     const headers = [
       "url",
-      "testId",
+      "target",
       "description",
       "help",
       "helpUrl",
       "impact",
-      "target",
+      "testId",
     ];
-    let outString = "";
-    outString +=
-      Object.keys(nodes[0] ? nodes[0] : {})
-        .filter((k) => headers.includes(k))
-        .join(",") + "\n";
-    outString += nodes
-      .map((node) =>
-        Object.entries(node)
-          .map((cell) => {
-            if (headers.includes(cell[0])) {
-              return `"${
-                typeof cell[1] === "string"
-                  ? cell[1].replaceAll("\n", " ")
-                  : cell[1].join("").replaceAll('"', "'")
-              }"`;
-            }
-            return null;
-          })
-          .filter(Boolean)
-          .join(",")
-      )
-      .join("\n");
+    const newNodes = nodes.map((node) => {
+      const newNode: Record<string, string> = {
+        url: node.url,
+        testId: node.testId,
+        description: node.description,
+        help: node.help,
+        helpUrl: node.helpUrl,
+        impact: node.impact ?? "",
+      };
+      newNode.target = node.target
+        .map((t) => {
+          if (typeof t === "string") {
+            return t.replaceAll("\n", " ");
+          } else if (Array.isArray(t)) {
+            return t.join("").replaceAll('"', "'");
+          }
+          return "";
+        })
+        .join(" ");
+      return newNode;
+    });
+
+    const outString = stringify(newNodes, { columns: headers, header: true });
     fs.writeFile(filePath, outString, (err) => {
       if (err) throw err;
       console.log("The csv wcag summary file has been saved!");
