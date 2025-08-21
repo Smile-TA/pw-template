@@ -1,0 +1,2 @@
+#!/usr/bin/env zsh
+cat ./summaries/image-summary.json | jq -r '.[] | "- Page \(.pageSrc) has images with large file sizes at these file sources:\n" + (.fileSrc | map("  - \(.url) (\(.size) kB)") | join("\n"))' | pbcopy
