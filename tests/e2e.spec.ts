@@ -1,19 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
-import { checkH1Count } from "../assertions/checkH1";
-import { checkGTM } from "../assertions/checkGTM";
-import { checkFavicon } from "../assertions/checkFavicon";
-import { checkOutboundLinks } from "../assertions/checkOutboundLinks";
-import { checkTelLinks } from "../assertions/checkTelLinks";
-import { checkRobots } from "../assertions/checkRobots";
-import { checkAdminEmail } from "../assertions/checkAdminEmail";
-import { checkSkipLink } from "../assertions/checkSkipLink";
-import { checkLastUpdated } from "../assertions/checkLastUpdated";
-import { checkSEO } from "../assertions/checkSEO";
-import { checkText } from "../assertions/checkText";
-import { checkPrivacyText } from "../assertions/checkPrivacyText";
+import { expect, test, type Page } from "../customFixture";
 import { pages } from "../pages";
-import { checkStagingLinks } from "../assertions/checkStagingLinks";
-import { scrollToBottom } from "../utils/scrollToBottom";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
@@ -90,10 +76,10 @@ pages.forEach((p) => {
     test("Check Too Many Requests", async () => {
       await expect(page.getByText("too many requests")).not.toBeVisible();
     });
-    test("Check favicon", async () => {
+    test("Check favicon", async ({ checkFavicon }) => {
       await checkFavicon(page);
     });
-    test("Check GTM", { tag: "@ProdOnly" }, async () => {
+    test("Check GTM", { tag: "@ProdOnly" }, async ({ checkGTM }) => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
@@ -103,16 +89,19 @@ pages.forEach((p) => {
       await checkGTM(page);
     });
 
-    test("Check h1 count", async () => {
+    test("Check h1 count", async ({ checkH1Count }) => {
       await checkH1Count(page);
     });
 
     //TODO: Add check internal links should not open in a new tab
-    test("Check outbound links", async ({ baseURL }) => {
+    test("Check outbound links", async ({ checkOutboundLinks, baseURL }) => {
       await checkOutboundLinks(page, baseURL);
     });
 
-    test("Check tel links match inner text", async ({ baseURL }) => {
+    test("Check tel links match inner text", async ({
+      checkTelLinks,
+      baseURL,
+    }) => {
       if (baseURL?.includes("planenroll") && !baseURL?.includes("staging")) {
         await page.waitForTimeout(1000);
       }
@@ -122,7 +111,7 @@ pages.forEach((p) => {
     test(
       "Check staging links do not exist on prod",
       { tag: "@ProdOnly" },
-      async () => {
+      async ({ checkStagingLinks }) => {
         if (process.env.BASE_URL) {
           test.skip(
             process.env.BASE_URL.includes("staging"),
@@ -133,11 +122,11 @@ pages.forEach((p) => {
       }
     );
 
-    test("Check robots", async () => {
+    test("Check robots", async ({ checkRobots }) => {
       await checkRobots(page);
     });
 
-    test("Check SEO", { tag: "@ProdOnly" }, async () => {
+    test("Check SEO", { tag: "@ProdOnly" }, async ({ checkSEO }) => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
@@ -151,11 +140,13 @@ pages.forEach((p) => {
       await checkSEO(page);
     });
 
-    test("Check skip link", async () => {
+    test("Check skip link", async ({ checkSkipLink }) => {
       await checkSkipLink(page);
     });
 
-    test("Check that placeholder text does not exist", async () => {
+    test("Check that placeholder text does not exist", async ({
+      checkText,
+    }) => {
       await checkText(page);
     });
     test("Reference to old integrity domain should not exist", async () => {
@@ -166,7 +157,9 @@ pages.forEach((p) => {
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
-    test("Check for image file sizes larger than 120kb", async ({}, testInfo) => {
+    test("Check for image file sizes larger than 120kb", async ({
+      scrollToBottom,
+    }, testInfo) => {
       await page.evaluate(scrollToBottom);
       // await page.evaluate(waitForImagesToLoad);
       await page.waitForTimeout(5000);
@@ -201,7 +194,7 @@ pages.forEach((p) => {
   });
 });
 
-test("Check Admin Email", async ({ page }) => {
+test("Check Admin Email", async ({ page, checkAdminEmail }) => {
   if (process.env.BASE_URL) {
     test.skip(
       process.env.BASE_URL.includes("staging"),
@@ -215,7 +208,11 @@ test("Check Admin Email", async ({ page }) => {
   await checkAdminEmail(page);
 });
 
-test("Check privacy page date and text", async ({ page }) => {
+test("Check privacy page date and text", async ({
+  page,
+  checkPrivacyText,
+  checkLastUpdated,
+}) => {
   const privacyPage = pages.find(
     (p) => p.includes("privacy") && p.indexOf("privacy") == 1
   );
