@@ -13,6 +13,7 @@ import { checkText } from "./assertions/checkText";
 import { checkPrivacyText } from "./assertions/checkPrivacyText";
 import { checkStagingLinks } from "./assertions/checkStagingLinks";
 import { scrollToBottom } from "./utils/scrollToBottom";
+import { checkLegalLinks } from "./assertions/checkLegalLinks";
 
 export const test = base.extend({
   checkH1Count: async ({}, use) => {
@@ -56,6 +57,9 @@ export const test = base.extend({
   },
   scrollToBottom: async ({}, use) => {
     await use(scrollToBottom);
+  },
+  checkLegalLinks: async ({}, use) => {
+    await use(checkLegalLinks);
   },
 });
 

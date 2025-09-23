@@ -143,6 +143,14 @@ pages.forEach((p) => {
     test("Check skip link", async ({ checkSkipLink }) => {
       await checkSkipLink(page);
     });
+    test("Check legal links", async ({ checkLegalLinks, baseURL }) => {
+      const ignoreWebSites = ["planenroll", "sellaflac", "humanaachieve"];
+      test.skip(
+        ignoreWebSites.some((website) => baseURL?.includes(website)),
+        `Legal links are not checked for ${ignoreWebSites.join(", ")}`
+      );
+      await checkLegalLinks(page);
+    });
 
     test("Check that placeholder text does not exist", async ({
       checkText,
