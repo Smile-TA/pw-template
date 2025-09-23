@@ -46,6 +46,12 @@ export async function checkLegalLinks(page: Page) {
     const doNotSellLinks = await page
       .locator("a[href^='https://submit-irm.trustarc.com/']")
       .all();
+    expect
+      .soft(
+        doNotSellLinks.length,
+        "Links with text Do Not Sell or Share My Personal Information are missing"
+      )
+      .toBeGreaterThan(0);
     for (const dnl of doNotSellLinks) {
       await expect
         .soft(
