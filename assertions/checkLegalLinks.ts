@@ -2,7 +2,9 @@ import { expect, type Page, test } from "@playwright/test";
 
 export async function checkLegalLinks(page: Page) {
   await test.step("Privacy Policy links", async () => {
-    const privacyPolicyLinks = await page.getByText(/Privacy Policy/i).all();
+    const privacyPolicyLinks = await page
+      .getByRole("link", { name: /Privacy Policy/i })
+      .all();
     expect
       .soft(
         privacyPolicyLinks.length,
@@ -11,7 +13,7 @@ export async function checkLegalLinks(page: Page) {
       .toBeGreaterThan(0);
     for (const ppl of privacyPolicyLinks) {
       await expect
-        .soft(ppl, "Privacy Policy link text is not correct")
+        .soft(ppl, "Privacy Policy link address is not correct")
         .toHaveAttribute("href", "https://integrity.com/privacy-policy/");
     }
   });
