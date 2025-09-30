@@ -14,7 +14,7 @@ export async function checkLegalLinks(page: Page) {
     for (const ppl of privacyPolicyLinks) {
       await expect
         .soft(ppl, "Privacy Policy link address is not correct")
-        .toHaveAttribute("href", "https://integrity.com/privacy-policy/");
+        .toHaveAttribute("href", "https://integrity.com/privacy-policy");
     }
   });
 
