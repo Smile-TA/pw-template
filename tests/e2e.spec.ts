@@ -235,3 +235,8 @@ test("Check privacy page date and text", async ({
     await checkLastUpdated(page);
   }
 });
+
+test("Check /author-sitemap.xml should be 404", async ({ request }) => {
+  const response = await request.get("/author-sitemap.xml");
+  expect(response.status(), "author-sitemap.xml should be 404").toBe(404);
+});
