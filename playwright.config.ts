@@ -1,4 +1,8 @@
-import { defineConfig, devices } from "@playwright/test";
+import {
+  defineConfig,
+  devices,
+  type ReporterDescription,
+} from "@playwright/test";
 
 /**
  * Read environment variables from file.
@@ -11,7 +15,13 @@ dotenv.config({ path: path.resolve(__dirname, ".env") });
 if (!process.env.BASE_URL) {
   throw new Error("Base url is missing");
 }
-
+const customReporters =
+  process.env.ENABLE_CUSTOM_REPORTERS === "true"
+    ? ([
+        ["./custom-reporters/axe-summary-reporter.ts"],
+        ["./custom-reporters/image-file-summary-reporter.ts"],
+      ] as ReporterDescription[])
+    : ([] as ReporterDescription[]);
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -26,12 +36,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ["list"],
-    ["html", { open: "always" }],
-    ["./custom-reporters/axe-summary-reporter.ts"],
-    ["./custom-reporters/image-file-summary-reporter.ts"],
-  ],
+  reporter: [["list"], ["html", { open: "always" }], ...customReporters],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
