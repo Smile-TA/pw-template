@@ -1,5 +1,20 @@
-import { expect, test, type Page } from "../customFixture";
+import { expect, test, type Page } from "@playwright/test";
 import { pages } from "../pages";
+import { checkH1Count } from "../assertions/checkH1";
+import { checkGTM } from "../assertions/checkGTM";
+import { checkFavicon } from "../assertions/checkFavicon";
+import { checkOutboundLinks } from "../assertions/checkOutboundLinks";
+import { checkTelLinks } from "../assertions/checkTelLinks";
+import { checkRobots } from "../assertions/checkRobots";
+import { checkAdminEmail } from "../assertions/checkAdminEmail";
+import { checkSkipLink } from "../assertions/checkSkipLink";
+import { checkLastUpdated } from "../assertions/checkLastUpdated";
+import { checkSEO } from "../assertions/checkSEO";
+import { checkText } from "../assertions/checkText";
+import { checkPrivacyText } from "../assertions/checkPrivacyText";
+import { checkStagingLinks } from "../assertions/checkStagingLinks";
+import { scrollToBottom } from "../utils/scrollToBottom";
+import { checkLegalLinks } from "../assertions/checkLegalLinks";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
@@ -76,10 +91,10 @@ pages.forEach((p) => {
     test("Check Too Many Requests", async () => {
       await expect(page.getByText("too many requests")).not.toBeVisible();
     });
-    test("Check favicon", async ({ checkFavicon }) => {
+    test("Check favicon", async ({}) => {
       await checkFavicon(page);
     });
-    test("Check GTM", { tag: "@ProdOnly" }, async ({ checkGTM }) => {
+    test("Check GTM", { tag: "@ProdOnly" }, async ({}) => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
@@ -89,19 +104,16 @@ pages.forEach((p) => {
       await checkGTM(page);
     });
 
-    test("Check h1 count", async ({ checkH1Count }) => {
+    test("Check h1 count", async ({}) => {
       await checkH1Count(page);
     });
 
     //TODO: Add check internal links should not open in a new tab
-    test("Check outbound links", async ({ checkOutboundLinks, baseURL }) => {
+    test("Check outbound links", async ({ baseURL }) => {
       await checkOutboundLinks(page, baseURL);
     });
 
-    test("Check tel links match inner text", async ({
-      checkTelLinks,
-      baseURL,
-    }) => {
+    test("Check tel links match inner text", async ({ baseURL }) => {
       if (baseURL?.includes("planenroll") && !baseURL?.includes("staging")) {
         await page.waitForTimeout(1000);
       }
@@ -111,7 +123,7 @@ pages.forEach((p) => {
     test(
       "Check staging links do not exist on prod",
       { tag: "@ProdOnly" },
-      async ({ checkStagingLinks }) => {
+      async ({}) => {
         if (process.env.BASE_URL) {
           test.skip(
             process.env.BASE_URL.includes("staging"),
@@ -122,11 +134,11 @@ pages.forEach((p) => {
       }
     );
 
-    test("Check robots", async ({ checkRobots }) => {
+    test("Check robots", async ({}) => {
       await checkRobots(page);
     });
 
-    test("Check SEO", { tag: "@ProdOnly" }, async ({ checkSEO }) => {
+    test("Check SEO", { tag: "@ProdOnly" }, async ({}) => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
@@ -140,10 +152,10 @@ pages.forEach((p) => {
       await checkSEO(page);
     });
 
-    test("Check skip link", async ({ checkSkipLink }) => {
+    test("Check skip link", async ({}) => {
       await checkSkipLink(page);
     });
-    test("Check legal links", async ({ checkLegalLinks, baseURL }) => {
+    test("Check legal links", async ({ baseURL }) => {
       const ignoreWebSites = ["planenroll", "sellaflac", "humanaachieve"];
       test.skip(
         ignoreWebSites.some((website) => baseURL?.includes(website)),
@@ -152,9 +164,7 @@ pages.forEach((p) => {
       await checkLegalLinks(page);
     });
 
-    test("Check that placeholder text does not exist", async ({
-      checkText,
-    }) => {
+    test("Check that placeholder text does not exist", async ({}) => {
       await checkText(page);
     });
     test("Reference to old integrity domain should not exist", async () => {
@@ -165,9 +175,7 @@ pages.forEach((p) => {
     test("Check console errors", async () => {
       expect.soft(consoleErrors.get(page.url())).toBeUndefined();
     });
-    test("Check for image file sizes larger than 120kb", async ({
-      scrollToBottom,
-    }, testInfo) => {
+    test("Check for image file sizes larger than 120kb", async ({}, testInfo) => {
       await page.evaluate(scrollToBottom);
       // await page.evaluate(waitForImagesToLoad);
       await page.waitForTimeout(5000);
@@ -202,7 +210,7 @@ pages.forEach((p) => {
   });
 });
 
-test("Check Admin Email", async ({ page, checkAdminEmail }) => {
+test("Check Admin Email", async ({ page }) => {
   if (process.env.BASE_URL) {
     test.skip(
       process.env.BASE_URL.includes("staging"),
@@ -216,11 +224,7 @@ test("Check Admin Email", async ({ page, checkAdminEmail }) => {
   await checkAdminEmail(page);
 });
 
-test("Check privacy page date and text", async ({
-  page,
-  checkPrivacyText,
-  checkLastUpdated,
-}) => {
+test("Check privacy page date and text", async ({ page }) => {
   const privacyPage = pages.find(
     (p) => p.includes("privacy") && p.indexOf("privacy") == 1
   );

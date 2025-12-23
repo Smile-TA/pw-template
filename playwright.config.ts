@@ -51,6 +51,11 @@ export default defineConfig({
       testMatch: "compliance.spec.ts",
     },
     {
+      name: "legalPagesContents",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: "legalPagesContents.spec.ts",
+    },
+    {
       name: "setup",
       testMatch: "**/*.setup.ts",
     },
