@@ -15,6 +15,7 @@ import { checkPrivacyText } from "../assertions/checkPrivacyText";
 import { checkStagingLinks } from "../assertions/checkStagingLinks";
 import { scrollToBottom } from "../utils/scrollToBottom";
 import { checkLegalLinks } from "../assertions/checkLegalLinks";
+import { checkCookieYes } from "../assertions/checkCookieYes";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
@@ -243,4 +244,9 @@ test("Check privacy page date and text", async ({ page }) => {
 test("Check /author-sitemap.xml should be 404", async ({ request }) => {
   const response = await request.get("/author-sitemap.xml");
   expect(response.status(), "author-sitemap.xml should be 404").toBe(404);
+});
+
+test("check cookie consent", async ({ page }) => {
+  await page.goto("");
+  await checkCookieYes(page);
 });
