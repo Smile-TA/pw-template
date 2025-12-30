@@ -15,13 +15,13 @@ dotenv.config({ path: path.resolve(__dirname, ".env") });
 if (!process.env.BASE_URL) {
   throw new Error("Base url is missing");
 }
-const customReporters =
+const customReporters: ReporterDescription[] =
   process.env.ENABLE_CUSTOM_REPORTERS === "true"
-    ? ([
+    ? [
         ["./custom-reporters/axe-summary-reporter.ts"],
         ["./custom-reporters/image-file-summary-reporter.ts"],
-      ] as ReporterDescription[])
-    : ([] as ReporterDescription[]);
+      ]
+    : [];
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
