@@ -6,8 +6,10 @@
     "lint": "tsc --noEmit && eslint .",
     "pretest": "npm run lint",
     "pretest:e2e": "npm run lint",
+    "pretest:compliance": "npm run lint",
     "test": "playwright test --workers 3",
     "test:e2e": "playwright test --workers 3 --project e2e",
+    "test:compliance": "playwright test --project compliance",
     "postinstall": "patch-package"
   },
   "keywords": [],
