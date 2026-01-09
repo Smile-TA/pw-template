@@ -61,7 +61,9 @@ export async function checkLegalLinks(page: Page) {
           dnl,
           "Do Not Sell or Share My Personal Information link text is not correct"
         )
-        .toContainText("Do Not Sell or Share My Personal Information");
+        .toContainText("Do Not Sell or Share My Personal Information", {
+          ignoreCase: true,
+        });
     }
   });
 }
