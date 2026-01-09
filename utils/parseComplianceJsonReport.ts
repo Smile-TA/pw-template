@@ -1,8 +1,15 @@
-import data from "../results.json";
 import { type Results } from "./complianceType";
 import { stringify } from "csv-stringify/sync";
 import fs from "fs";
-const typedData = data as Results;
+
+if (!fs.existsSync("results.json"))
+  throw new Error("results.json file not found");
+
+const data = fs.readFileSync("results.json", "utf-8");
+
+const dataObj = JSON.parse(data);
+
+const typedData = dataObj as Results;
 
 const processedArr = typedData.suites[0].suites?.map((suite) => {
   return {
