@@ -16,6 +16,7 @@ import { checkStagingLinks } from "../assertions/checkStagingLinks";
 import { scrollToBottom } from "../utils/scrollToBottom";
 import { checkLegalLinks } from "../assertions/checkLegalLinks";
 import { checkCookieYes } from "../assertions/checkCookieYes";
+import { checkPlugins } from "../assertions/checkPlugins";
 
 type WAIT_UNTIL_OPTION = "load" | "domcontentloaded" | "networkidle" | "commit";
 
@@ -99,7 +100,7 @@ pages.forEach((p) => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
-          "GTM is only checked on production"
+          "GTM is only checked on production",
         );
       }
       await checkGTM(page);
@@ -128,11 +129,11 @@ pages.forEach((p) => {
         if (process.env.BASE_URL) {
           test.skip(
             process.env.BASE_URL.includes("staging"),
-            "Staging links are checked only on production"
+            "Staging links are checked only on production",
           );
         }
         await checkStagingLinks(page);
-      }
+      },
     );
 
     test("Check robots", async ({}) => {
@@ -143,11 +144,11 @@ pages.forEach((p) => {
       if (process.env.BASE_URL) {
         test.skip(
           process.env.BASE_URL.includes("staging"),
-          "SEO tags are only checked on production"
+          "SEO tags are only checked on production",
         );
         test.skip(
           p.includes("privacy") || p.includes("terms"),
-          "SEO meta tag is not needed for this page."
+          "SEO meta tag is not needed for this page.",
         );
       }
       await checkSEO(page);
@@ -160,7 +161,7 @@ pages.forEach((p) => {
       const ignoreWebSites = ["planenroll", "sellaflac", "humanaachieve"];
       test.skip(
         ignoreWebSites.some((website) => baseURL?.includes(website)),
-        `Legal links are not checked for ${ignoreWebSites.join(", ")}`
+        `Legal links are not checked for ${ignoreWebSites.join(", ")}`,
       );
       await checkLegalLinks(page);
     });
@@ -170,7 +171,7 @@ pages.forEach((p) => {
     });
     test("Reference to old integrity domain should not exist", async () => {
       await expect(
-        page.locator('a[href*="integritymarketing.com"]')
+        page.locator('a[href*="integritymarketing.com"]'),
       ).toHaveCount(0);
     });
     test("Check console errors", async () => {
@@ -189,8 +190,8 @@ pages.forEach((p) => {
             .soft(
               image[1],
               `Image from ${image[0]} of size ${Math.round(
-                image[1] / 1024
-              )}kB is larger than threshold of ${imageThresholdKB / 1024}kB`
+                image[1] / 1024,
+              )}kB is larger than threshold of ${imageThresholdKB / 1024}kB`,
             )
             .toBeLessThanOrEqual(imageThresholdKB);
         }
@@ -215,19 +216,19 @@ test("Check Admin Email", async ({ page }) => {
   if (process.env.BASE_URL) {
     test.skip(
       process.env.BASE_URL.includes("staging"),
-      "Admin email is only checked on production"
+      "Admin email is only checked on production",
     );
   }
-  test.skip(
+  test.fail(
     !process.env.ADMIN_USR_NAME || !process.env.ADMIN_USR_PSW,
-    "Admin credentials not provided"
+    "Admin credentials not provided",
   );
   await checkAdminEmail(page);
 });
 
 test("Check privacy page date and text", async ({ page }) => {
   const privacyPage = pages.find(
-    (p) => p.includes("privacy") && p.indexOf("privacy") == 1
+    (p) => p.includes("privacy") && p.indexOf("privacy") == 1,
   );
 
   if (!privacyPage) {
@@ -246,7 +247,15 @@ test("Check /author-sitemap.xml should be 404", async ({ request }) => {
   expect(response.status(), "author-sitemap.xml should be 404").toBe(404);
 });
 
-test("check cookie consent", async ({ page }) => {
+test("Check cookie consent", async ({ page }) => {
   await page.goto("");
   await checkCookieYes(page);
+});
+
+test("Check that required plugins are installed", async ({ page }) => {
+  test.fail(
+    !process.env.ADMIN_USR_NAME || !process.env.ADMIN_USR_PSW,
+    "Admin credentials not provided",
+  );
+  await checkPlugins(page);
 });

@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { login } from "../utils/login";
 
 const allowedEmails = [
   "webdev@thomasarts.com",
@@ -11,21 +12,7 @@ const disallowedEmails = [
 ];
 
 export async function checkAdminEmail(page: Page) {
-  await page.goto("/wp-login.php");
-  await page.locator("#user_login").fill(process.env.ADMIN_USR_NAME ?? "");
-  await page.locator("#user_pass").fill(process.env.ADMIN_USR_PSW ?? "");
-  await page.locator("#wp-submit").click();
-  const reminder = page.getByText("Remind me later");
-  if (await reminder.isVisible()) {
-    await reminder.click();
-  }
-
-  const updateDB = page.getByAltText("Update WordPress Database");
-  if (await updateDB.isVisible()) {
-    await updateDB.click();
-  }
-
-  await page.getByRole("menuitem", { name: "About WordPress" }).click();
+  await login(page);
   await page
     .locator("#menu-settings > .wp-has-submenu > .wp-menu-name")
     .click();
