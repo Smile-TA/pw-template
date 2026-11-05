@@ -1,0 +1,12 @@
+{
+  ".nav-link > span": {
+    "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=playwright",
+    "impact": "serious",
+    "pageCount": 1,
+    "pages": [
+      { "url": "https://staging.example.com/privacy-policy/", "testId": "#?testId=b1c7859d981cc20c96be-1111111111111111111" }
+    ]
+  }
+}

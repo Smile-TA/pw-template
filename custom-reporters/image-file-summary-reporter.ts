@@ -5,13 +5,15 @@ import type {
   TestCase,
 } from "@playwright/test/reporter";
 
-import fs from "node:fs";
-import path from "path";
+import { resetSummaries, writeSummary } from "./summaries";
 
 class ImageFileSummaryReporter implements Reporter {
   private suite!: Suite;
   onBegin(config: FullConfig, suite: Suite): void {
     this.suite = suite;
+    // Drop an earlier run's summaries (see custom-reporters/summaries.ts) so this run's
+    // report can't link a stale one — CI reuses its workspace across builds.
+    resetSummaries();
   }
 
   onEnd() {
@@ -20,15 +22,8 @@ class ImageFileSummaryReporter implements Reporter {
       console.log(" No large file size images found!");
       return;
     }
-    const filePath = path.join(
-      process.cwd(),
-      "summaries",
-      "image-summary.json"
-    );
-    fs.writeFile(filePath, JSON.stringify(images), (err) => {
-      if (err) throw err;
-      console.log("The json image summary file has been saved!");
-    });
+    writeSummary("image-summary.json", JSON.stringify(images));
+    console.log("The json image summary file has been saved!");
   }
 
   getFailedImages(suite: Suite | TestCase, res: string[] = []) {

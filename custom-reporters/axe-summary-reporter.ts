@@ -5,10 +5,9 @@ import type {
   TestCase,
 } from "@playwright/test/reporter";
 
-import fs from "node:fs";
-import path from "path";
-
 import { stringify } from "csv-stringify/sync";
+
+import { resetSummaries, writeSummary } from "./summaries";
 
 import { type Result as ViolationResult, NodeResult } from "axe-core";
 
@@ -29,6 +28,9 @@ class AxeSummaryReporter implements Reporter {
   private suite!: Suite;
   onBegin(config: FullConfig, suite: Suite) {
     this.suite = suite;
+    // Drop an earlier run's summaries (see custom-reporters/summaries.ts) so this run's
+    // report can't link a stale one — CI reuses its workspace across builds.
+    resetSummaries();
   }
 
   onEnd() {
@@ -45,7 +47,9 @@ class AxeSummaryReporter implements Reporter {
       const modifiedNodes = violation.nodes.map((n) => {
         return {
           url: violation.url,
-          testId: "http://localhost:9323/#?testId=" + violation.testId,
+          // Relative to the published report root (not the local PW server on
+          // localhost:9323) so the link resolves wherever the report is hosted.
+          testId: "#?testId=" + violation.testId,
           description: violation.description,
           help: violation.help,
           helpUrl: violation.helpUrl,
@@ -108,15 +112,11 @@ class AxeSummaryReporter implements Reporter {
       };
       reduced[k].pages = v.map(({ url, testId }) => ({ url, testId }));
     }
-    const filePath = path.join(process.cwd(), "summaries", "wcag-summary.json");
-    fs.writeFile(filePath, JSON.stringify(reduced), (err) => {
-      if (err) throw err;
-      console.log("The json wcag summary file has been saved!");
-    });
+    writeSummary("wcag-summary.json", JSON.stringify(reduced));
+    console.log("The json wcag summary file has been saved!");
   }
 
   writeCSVSummary(nodes: violationNode[]) {
-    const filePath = path.join(process.cwd(), "summaries", "wcag-summary.csv");
     const headers = [
       "url",
       "target",
@@ -149,10 +149,8 @@ class AxeSummaryReporter implements Reporter {
     });
 
     const outString = stringify(newNodes, { columns: headers, header: true });
-    fs.writeFile(filePath, outString, (err) => {
-      if (err) throw err;
-      console.log("The csv wcag summary file has been saved!");
-    });
+    writeSummary("wcag-summary.csv", outString);
+    console.log("The csv wcag summary file has been saved!");
   }
 
   getViolations(suite: Suite | TestCase, res: Violation[] = []) {

@@ -1,0 +1,2 @@
+url,target,description,help,helpUrl,impact,testId
+https://staging.example.com/privacy-policy/,.nav-link > span,Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds,Elements must meet minimum color contrast ratio thresholds,https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=playwright,serious,#?testId=b1c7859d981cc20c96be-1111111111111111111
